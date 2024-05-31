@@ -86,7 +86,7 @@ root = tk.Tk()
 
 # window components
 root.geometry("1100x650")
-root.title("Login")
+root.title("Log in")
 root.resizable(False, False)    # avoid resizing window
 
 # access url, not relative paths
