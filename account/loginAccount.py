@@ -61,7 +61,7 @@ def login():
     password = passwordEntry.get()
     
     if (email == "" or email == "Email") or (password == "" or password == "Password"):
-        messagebox.showerror("Entry error", "Invalid credentials.")
+        messagebox.showerror("Entry error", "Invalid Email or Password.")
     
     else:
         try:

@@ -72,6 +72,8 @@ def signup(parent):
         password = passwordEntry.get()
         cpassword = confirmPasswordEntry.get()
         
+        if em
+        
         
         
         print("OK")
