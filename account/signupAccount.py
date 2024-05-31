@@ -9,6 +9,14 @@ from io import BytesIO
 
 def signup(parent):
     # Functions
+    def name_enter(event):
+        if emailEntry.get() == 'Name':
+            emailEntry.delete(0, 'end')
+    
+    def name_leave(event):
+        if emailEntry.get() == '':
+            emailEntry.insert(0, "Name")
+            
     def email_enter(event):
         if emailEntry.get() == 'Email':
             emailEntry.delete(0, 'end')
@@ -59,6 +67,15 @@ def signup(parent):
         confirmPasswordEntry.config(show="")
         cpwBtn.config(command=chide)
     
+    def signupacc():
+        email = emailEntry.get()
+        password = passwordEntry.get()
+        cpassword = confirmPasswordEntry.get()
+        
+        
+        
+        print("OK")
+    
     # sign up window
     signupWindow = tk.Toplevel(parent)
     signupWindow.geometry("1100x650")
@@ -90,37 +107,49 @@ def signup(parent):
     label = tk.Label(canvas, text="SIGN UP", font=('Courier', 30, 'bold'), bg="white", fg="#FFBA00")
     label.place(x=470, y=40)
     
+    # enter name
+    nameEntry = tk.Entry(canvas, width=25, font=('Courier', 18, 'bold'), bd=0, fg="#FFBA00")
+    nameEntry.insert(0, "Name")
+    nameEntry.bind("<FocusIn>", name_enter)
+    nameEntry.bind("<FocusOut>", name_leave)
+    tk.Frame(signupWindow, width=350, height=2, bg="#FFBA00").place(x=380, y=215)
+    nameEntry.place(x=380, y=190)
+    
     # enter email
     emailEntry = tk.Entry(canvas, width=25, font=('Courier', 18, 'bold'), bd=0, fg="#FFBA00")
     emailEntry.insert(0, "Email")
     emailEntry.bind("<FocusIn>", email_enter)
     emailEntry.bind("<FocusOut>", email_leave)
-    tk.Frame(signupWindow, width=350, height=2, bg="#FFBA00").place(x=380, y=215)
-    emailEntry.place(x=380, y=190)
+    tk.Frame(signupWindow, width=350, height=2, bg="#FFBA00").place(x=380, y=255)
+    emailEntry.place(x=380, y=230)
     
     # enter password
     passwordEntry = tk.Entry(canvas, width=20, font=('Courier', 18, 'bold'), bd=0, fg="#FFBA00")
     passwordEntry.insert(0, "Password")
     passwordEntry.bind("<FocusIn>", password_enter)
     passwordEntry.bind("<FocusOut>", password_leave)
-    tk.Frame(signupWindow, width=350, height=2, bg="#FFBA00").place(x=380, y=255)
-    passwordEntry.place(x=380, y=230)
+    tk.Frame(signupWindow, width=350, height=2, bg="#FFBA00").place(x=380, y=295)
+    passwordEntry.place(x=380, y=270)
     
     # confirm password
     confirmPasswordEntry = tk.Entry(canvas, width=20, font=('Courier', 18, 'bold'), bd=0, fg="#FFBA00")
     confirmPasswordEntry.insert(0, "Confirm Password")
     confirmPasswordEntry.bind("<FocusIn>", cpassword_enter)
     confirmPasswordEntry.bind("<FocusOut>", cpassword_leave)
-    tk.Frame(signupWindow, width=350, height=2, bg="#FFBA00").place(x=380, y=295)
-    confirmPasswordEntry.place(x=380, y=270)
+    tk.Frame(signupWindow, width=350, height=2, bg="#FFBA00").place(x=380, y=335)
+    confirmPasswordEntry.place(x=380, y=310)
     
     # show/hide button for password
     pwBtn = tk.Button(canvas, text="Show", font=('Courier', 12, 'bold'), bd=0, bg="#FFFFFF", activebackground="#FFFFFF", fg="#FFBA00", activeforeground="#FFBA00", cursor="hand2", command=show)
-    pwBtn.place(x=680, y=230)
+    pwBtn.place(x=680, y=270)
     
     # show/hide button for password
     cpwBtn = tk.Button(canvas, text="Show", font=('Courier', 12, 'bold'), bd=0, bg="#FFFFFF", activebackground="#FFFFFF", fg="#FFBA00", activeforeground="#FFBA00", cursor="hand2", command=cshow)
-    cpwBtn.place(x=680, y=270)
+    cpwBtn.place(x=680, y=310)
+    
+    # sign up button
+    signupBtn = tk.Button(canvas, text="Sign Up", font=('Courier', 16, 'bold'), bd=0, bg="#FFBA00", activebackground="#FFA500", fg="#725B32", activeforeground="white", cursor="hand2", width=20, command=signupacc)
+    signupBtn.place(x=420, y=430)
     
     backBtn = tk.Button(canvas, text="Go back to Log in page", command=lambda: gotoLogIn(signupWindow, parent))
     backBtn.pack(pady=20)
