@@ -70,6 +70,11 @@ def login():
         myresult = mycursor.fetchone()
         print(myresult)
         
+        if myresult == None:
+            messagebox.showinfo("Invalid", "Invalid Email or Password.")
+        else:
+            messagebox.showinfo("Log in", "Welcome.")
+        
 
 # root window
 root = tk.Tk()
