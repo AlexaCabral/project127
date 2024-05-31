@@ -18,8 +18,13 @@ import PIL
 from PIL import Image, ImageTk
 import requests
 from io import BytesIO
+import signupAccount
 
 # Functions
+def gotoSignUp():
+    root.withdraw()
+    signupAccount.signup(root)
+    
 def email_enter(event):
     if emailEntry.get() == 'Email':
         emailEntry.delete(0, 'end')
@@ -137,7 +142,7 @@ signupLabel = tk.Label(canvas, text="Don't have an account?", font=('Arial', 12)
 signupLabel.place(x=380, y=590)
 
 # create account button
-createBtn = tk.Button(canvas, text="Create an account.", font=('Arial', 11, 'bold'), bd=0, bg="#FFFFFF", activebackground="#FFFFFF", fg="#FFA500", activeforeground="#725B32", cursor="hand2", width=20)
+createBtn = tk.Button(canvas, text="Create an account.", font=('Arial', 11, 'bold'), bd=0, bg="#FFFFFF", activebackground="#FFFFFF", fg="#FFA500", activeforeground="#725B32", cursor="hand2", width=20, command=gotoSignUp)
 createBtn.place(x=543, y=588)
 
 root.mainloop()
