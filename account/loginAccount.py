@@ -48,6 +48,21 @@ def show():
     passwordEntry.config(show="")
     pwBtn.config(command=hide)
 
+def login():
+    email = emailEntry.get()
+    password = passwordEntry.get()
+    
+    if (email == "" or email == "Email") or (password == "" or password == "Password"):
+        messagebox.showerror("Entry error", "Invalid credentials.")
+    
+    else:
+        try:
+            mydb = mysql.connector.connect(host='project'@'localhost', user='project', password='ilove127', database='project')
+            mycursor = mydb.cursor()
+            print("Connected to database")
+        except:
+            messagebox.showerror("Connection", "Failed")
+
 # root window
 root = tk.Tk()
 
@@ -101,7 +116,7 @@ pwBtn = tk.Button(canvas, text="Show", font=('Courier', 12, 'bold'), bd=0, bg="#
 pwBtn.place(x=680, y=230)
 
 # log in button
-loginBtn = tk.Button(canvas, text="Log In", font=('Courier', 16, 'bold'), bd=0, bg="#FFBA00", activebackground="#FFA500", fg="#725B32", activeforeground="white", cursor="hand2", width=20)
+loginBtn = tk.Button(canvas, text="Log In", font=('Courier', 16, 'bold'), bd=0, bg="#FFBA00", activebackground="#FFA500", fg="#725B32", activeforeground="white", cursor="hand2", width=20, command=login)
 loginBtn.place(x=425, y=330)
 
 # create account
