@@ -21,7 +21,7 @@ CREATE TABLE customer(
         (INSTR(password, '9') > 0)
     ),
 	email VARCHAR(50) NOT NULL,
-    CONSTRAINT customer_email_valid CHECK (email LIKE '%@%.%'),
+    CONSTRAINT customer_email_valid CHECK (email LIKE '%_%@%_%.%_%'),
 	CONSTRAINT customer_email_uk UNIQUE(email),
 	PRIMARY KEY(account_id) 
 );
