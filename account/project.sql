@@ -10,8 +10,9 @@ CREATE TABLE customer(
     account_id INT(8) NOT NULL AUTO_INCREMENT,
 	name VARCHAR(50) NOT NULL,
 	password VARCHAR(50) NOT NULL,
+    CONSTRAINT customer_password_valid CHECK (password LIKE '%[0-9]%'),
 	email VARCHAR(50) NOT NULL,
-    CONSTRAINT email_email_valid CHECK (email LIKE '%@%.%'),
+    CONSTRAINT customer_email_valid CHECK (email LIKE '%@%.%'),
 	CONSTRAINT customer_email_uk UNIQUE(email),
 	PRIMARY KEY(account_id) 
 );
