@@ -41,6 +41,8 @@ def password_enter(event):
 def password_leave(event):
     if passwordEntry.get() == '':
         passwordEntry.insert(0, "Password")
+        passwordEntry.config(show="")
+        
         
 def hide():
     pwBtn.config(text="Show")
