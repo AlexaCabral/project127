@@ -57,11 +57,19 @@ def login():
     
     else:
         try:
-            mydb = mysql.connector.connect(host='project'@'localhost', user='project', password='ilove127', database='project')
+            mydb = mysql.connector.connect(host='localhost', user='root', password='server', database='project')
             mycursor = mydb.cursor()
-            print("Connected to database")
+            print("Connected to database...")
         except:
             messagebox.showerror("Connection", "Failed")
+            return
+
+        mycursor.execute("USE project")
+        mycursor.execute("SELECT * FROM customer WHERE email=%s and password=%s",(email, password))
+        
+        myresult = mycursor.fetchone()
+        print(myresult)
+        
 
 # root window
 root = tk.Tk()
