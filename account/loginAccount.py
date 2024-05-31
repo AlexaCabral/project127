@@ -142,10 +142,10 @@ loginBtn.place(x=425, y=330)
 
 # create account
 signupLabel = tk.Label(canvas, text="Don't have an account?", font=('Arial', 12), bg="white", fg="#725B32")
-signupLabel.place(x=380, y=590)
+signupLabel.place(x=396, y=590)
 
 # create account button
-createBtn = tk.Button(canvas, text="Create an account.", font=('Arial', 11, 'bold'), bd=0, bg="#FFFFFF", activebackground="#FFFFFF", fg="#FFA500", activeforeground="#725B32", cursor="hand2", width=20, command=gotoSignUp)
-createBtn.place(x=543, y=588)
+createBtn = tk.Button(canvas, text="Create an account.", font=('Arial', 11, 'bold'), bd=0, bg="#FFFFFF", activebackground="#FFFFFF", fg="#FFA500", activeforeground="#725B32", cursor="hand2", width=15, command=gotoSignUp)
+createBtn.place(x=560, y=588)
 
 root.mainloop()

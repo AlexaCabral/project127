@@ -151,8 +151,15 @@ def signup(parent):
     signupBtn = tk.Button(canvas, text="Sign Up", font=('Courier', 16, 'bold'), bd=0, bg="#FFBA00", activebackground="#FFA500", fg="#725B32", activeforeground="white", cursor="hand2", width=20, command=signupacc)
     signupBtn.place(x=420, y=430)
     
-    backBtn = tk.Button(canvas, text="Go back to Log in page", command=lambda: gotoLogIn(signupWindow, parent))
-    backBtn.pack(pady=20)
+    # go back to log in account
+    loginLabel = tk.Label(canvas, text="Already have an account?", font=('Arial', 12), bg="white", fg="#725B32")
+    loginLabel.place(x=420, y=590)
+
+    createBtn = tk.Button(canvas, text="Log in.", font=('Arial', 11, 'bold'), bd=0, bg="#FFFFFF", activebackground="#FFFFFF", fg="#FFA500", activeforeground="#725B32", cursor="hand2", width=6, command=lambda: gotoLogIn(signupWindow, parent))
+    createBtn.place(x=601, y=588)
+    
+    # backBtn = tk.Button(canvas, text="Go back to Log in page", command=lambda: gotoLogIn(signupWindow, parent))
+    # backBtn.pack(pady=20)
 
 def gotoLogIn(signupWindow, parent):
     signupWindow.destroy()
