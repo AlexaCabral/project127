@@ -10,12 +10,12 @@ from io import BytesIO
 def signup(parent):
     # Functions
     def name_enter(event):
-        if emailEntry.get() == 'Name':
-            emailEntry.delete(0, 'end')
+        if nameEntry.get() == 'Name':
+            nameEntry.delete(0, 'end')
     
     def name_leave(event):
-        if emailEntry.get() == '':
-            emailEntry.insert(0, "Name")
+        if nameEntry.get() == '':
+            nameEntry.insert(0, "Name")
             
     def email_enter(event):
         if emailEntry.get() == 'Email':
@@ -72,12 +72,15 @@ def signup(parent):
         password = passwordEntry.get()
         cpassword = confirmPasswordEntry.get()
         
-        if em
+        if (email == "" or email == "Email") or (password == "" or password == "Password") or (cpassword == "" or cpassword == "Confirm Password"):
+            messagebox.showerror("Entry error", "Invalid Email or Password.")
         
+        else:
+            if(password==cpassword):
+                print("OK")
+            else:
+                messagebox.showerror("Entry error", "Invalid Email or Password.")
         
-        
-        print("OK")
-    
     # sign up window
     signupWindow = tk.Toplevel(parent)
     signupWindow.geometry("1100x650")
