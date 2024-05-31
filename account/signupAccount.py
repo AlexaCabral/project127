@@ -68,6 +68,7 @@ def signup(parent):
         cpwBtn.config(command=chide)
     
     def signupacc():
+        name = nameEntry.get()
         email = emailEntry.get()
         password = passwordEntry.get()
         cpassword = confirmPasswordEntry.get()
@@ -76,19 +77,49 @@ def signup(parent):
             messagebox.showerror("Entry error", "Invalid Email or Password.")
         
         else:
+            valid = 0
             if(password==cpassword):
-                valid = 0
                 for char in password:
                     if char.isdigit():
                         valid = 1
                         break
                 
-                if valid == 1:
-                   print("valid") 
-                else:
+                if valid == 0:
                     messagebox.showerror("Entry error", "Password must contain atleast one number [0-9].")
+                else:
+                    try:
+                        mydb = mysql.connector.connect(host='localhost', user='root', password='server', database='project')
+                        mycursor = mydb.cursor()
+                        print("Connected to database...")
+                    except:
+                        messagebox.showerror("Connection", "Failed")
+                        return
+
+                    mycursor.execute("USE project")
+                    print("projec used...")
+                            
+                    mycursor.execute("SELECT email FROM customer WHERE email = %s",(email,))
+                    print("query")
+                            
+                            
+                    myresult = mycursor.fetchone()
+                    print(myresult)
+                            
+                    if myresult == (0,) or myresult == None:
+                        # Insert into the database 
+                        mycursor.execute("INSERT INTO customer VALUES (%s, %s, %s)", (name, password, email))
+                        mycursor.commit()
+                        
+                        mycursor.close()
+                        mydb.close()
+                                
+                        messagebox.showinfo("Success", "All Set! Go back and log in your account.")
+                    else:
+                        messagebox.showerror("Invalid!", "Account already exists!")
+                        return
             else:
                 messagebox.showerror("Entry error", "Invalid Email or Password.")
+                return
         
     # sign up window
     signupWindow = tk.Toplevel(parent)

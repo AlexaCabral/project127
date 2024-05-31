@@ -79,7 +79,7 @@ def login():
         print(myresult)
         
         if myresult == None:
-            messagebox.showinfo("Invalid", "Invalid Email or Password.")
+            messagebox.showerror("Invalid", "Invalid Email or Password.")
         else:
             messagebox.showinfo("Log in", "Welcome.")
         
