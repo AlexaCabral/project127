@@ -38,15 +38,15 @@ def password_leave(event):
         passwordEntry.insert(0, "Password")
         
 def hide():
-    showBtn.config(text="show")
+    pwBtn.config(text="Show")
     if passwordEntry.get() != "Password":
         passwordEntry.config(show="*")
-    showBtn.config(command=show)
+    pwBtn.config(command=show)
 
 def show():
-    showBtn.config(text="Hide")
+    pwBtn.config(text="Hide")
     passwordEntry.config(show="")
-    showBtn.config(command=hide)
+    pwBtn.config(command=hide)
 
 # root window
 root = tk.Tk()
@@ -74,7 +74,7 @@ canvas.create_image(0, 0, anchor=tk.NW, image=bg_image)
 
 # log in components
 # background
-canvas.create_rectangle(300, 25, 800, 625, fill='white', outline="#0C3B2E")
+canvas.create_rectangle(350, 25, 750, 625, fill='white', outline="#0C3B2E")
 
 # header
 label = tk.Label(canvas, text="LOGIN", font=('Courier', 30, 'bold'), bg="white", fg="#FFBA00")
@@ -97,10 +97,19 @@ tk.Frame(root, width=350, height=2, bg="#FFBA00").place(x=380, y=255)
 passwordEntry.place(x=380, y=230)
 
 # show/hide button for password
-showBtn = tk.Button(canvas, text="Show", font=('Courier', 12, 'bold'), bd=0, bg="#FFFFFF", activebackground="#FFFFFF", fg="#FFBA00", activeforeground="#FFBA00", cursor="hand2", command=show)
-showBtn.place(x=680, y=230)
+pwBtn = tk.Button(canvas, text="Show", font=('Courier', 12, 'bold'), bd=0, bg="#FFFFFF", activebackground="#FFFFFF", fg="#FFBA00", activeforeground="#FFBA00", cursor="hand2", command=show)
+pwBtn.place(x=680, y=230)
 
+# log in button
+loginBtn = tk.Button(canvas, text="Log In", font=('Courier', 16, 'bold'), bd=0, bg="#FFBA00", activebackground="#FFA500", fg="#725B32", activeforeground="white", cursor="hand2", width=20)
+loginBtn.place(x=425, y=330)
 
+# create account
+signupLabel = tk.Label(canvas, text="Don't have an account?", font=('Arial', 12), bg="white", fg="#725B32")
+signupLabel.place(x=380, y=590)
 
+# create account button
+createBtn = tk.Button(canvas, text="Create an account.", font=('Arial', 11, 'bold'), bd=0, bg="#FFFFFF", activebackground="#FFFFFF", fg="#FFA500", activeforeground="#725B32", cursor="hand2", width=20)
+createBtn.place(x=543, y=588)
 
 root.mainloop()
