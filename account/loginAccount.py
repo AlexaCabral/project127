@@ -31,10 +31,22 @@ def email_leave(event):
 def password_enter(event):
     if passwordEntry.get() == 'Password':
         passwordEntry.delete(0, 'end')
+    passwordEntry.config(show="*")
     
 def password_leave(event):
     if passwordEntry.get() == '':
         passwordEntry.insert(0, "Password")
+        
+def hide():
+    showBtn.config(text="show")
+    if passwordEntry.get() != "Password":
+        passwordEntry.config(show="*")
+    showBtn.config(command=show)
+
+def show():
+    showBtn.config(text="Hide")
+    passwordEntry.config(show="")
+    showBtn.config(command=hide)
 
 # root window
 root = tk.Tk()
@@ -60,9 +72,6 @@ canvas.pack(fill=tk.BOTH, expand=True)
 
 canvas.create_image(0, 0, anchor=tk.NW, image=bg_image)
 
-
-
-
 # log in components
 # background
 canvas.create_rectangle(300, 25, 800, 625, fill='white', outline="#0C3B2E")
@@ -80,12 +89,18 @@ tk.Frame(root, width=350, height=2, bg="#FFBA00").place(x=380, y=215)
 emailEntry.place(x=380, y=190)
 
 # enter password
-passwordEntry = tk.Entry(canvas, width=25, font=('Courier', 18, 'bold'), bd=0, fg="#FFBA00")
+passwordEntry = tk.Entry(canvas, width=20, font=('Courier', 18, 'bold'), bd=0, fg="#FFBA00")
 passwordEntry.insert(0, "Password")
 passwordEntry.bind("<FocusIn>", password_enter)
 passwordEntry.bind("<FocusOut>", password_leave)
 tk.Frame(root, width=350, height=2, bg="#FFBA00").place(x=380, y=255)
 passwordEntry.place(x=380, y=230)
+
+# show/hide button for password
+showBtn = tk.Button(canvas, text="Show", font=('Courier', 12, 'bold'), bd=0, bg="#FFFFFF", activebackground="#FFFFFF", fg="#FFBA00", activeforeground="#FFBA00", cursor="hand2", command=show)
+showBtn.place(x=680, y=230)
+
+
 
 
 root.mainloop()
