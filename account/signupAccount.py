@@ -77,7 +77,16 @@ def signup(parent):
         
         else:
             if(password==cpassword):
-                print("OK")
+                valid = 0
+                for char in password:
+                    if char.isdigit():
+                        valid = 1
+                        break
+                
+                if valid == 1:
+                   print("valid") 
+                else:
+                    messagebox.showerror("Entry error", "Password must contain atleast one number [0-9].")
             else:
                 messagebox.showerror("Entry error", "Invalid Email or Password.")
         
