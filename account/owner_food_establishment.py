@@ -5,9 +5,10 @@ from PIL import Image, ImageTk
 import requests
 from io import BytesIO
 import threading
+from owner_food_item import owner_food_item  # Import the new window function
 
 
-def customer_food_establishment():
+def owner_food_establishment(account_id):
     def search_food_establishment(name):
         try:
             database = mysql.connector.connect(
@@ -22,8 +23,9 @@ def customer_food_establishment():
             messagebox.showerror("Connection", f"Failed: {err}")
             return []
 
-        query = "SELECT * FROM food_establishment WHERE name LIKE %s"
-        database_cursor.execute(query, (f"%{name}%",))
+        query = f"SELECT * FROM food_establishment WHERE account_id={account_id} AND name LIKE '%{name}%'"
+        print(query)
+        database_cursor.execute(query)
 
         results = database_cursor.fetchall()
 
@@ -62,6 +64,7 @@ def customer_food_establishment():
         for est in results:
             card = tk.Frame(results_frame, bd=2, relief="solid", padx=10, pady=10)
             card.grid(row=row, column=col, padx=10, pady=10)
+            card.bind("<Button-1>", lambda e, est_id=est[0]: owner_food_item(est_id))
 
             # Placeholder for the image
             img_label = tk.Label(card)
@@ -121,5 +124,3 @@ def customer_food_establishment():
 
     root.mainloop()
 
-
-customer_food_establishment()
