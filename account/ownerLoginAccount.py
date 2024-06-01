@@ -5,9 +5,13 @@ import PIL
 from PIL import Image, ImageTk
 import requests
 from io import BytesIO
+import ownerSignupAccount
 
 
 def new_window(parent):
+    def gotoSignUp():
+        newWindow.withdraw()
+        ownerSignupAccount.signup(newWindow)
     
     def email_enter(event):
         if emailEntry.get() == 'Email':
@@ -137,7 +141,7 @@ def new_window(parent):
     signupLabel.place(x=420, y=590)
     
     # create button
-    createBtn = tk.Button(canvas, text="Create an account.", font=('Arial', 10, 'bold'), bd=0, bg="#FFFFFF", activebackground="#FFFFFF", fg="#6D9773", activeforeground="#0C3B2E", cursor="hand2", width=15, command=lambda: gotoLogIn(newWindow, parent))
+    createBtn = tk.Button(canvas, text="Create an account.", font=('Arial', 10, 'bold'), bd=0, bg="#FFFFFF", activebackground="#FFFFFF", fg="#6D9773", activeforeground="#0C3B2E", cursor="hand2", width=15, command=gotoSignUp)
     createBtn.place(x=560, y=588)
 
 
