@@ -20,11 +20,16 @@ from PIL import Image, ImageTk
 import requests
 from io import BytesIO
 import signupAccount
+import ownerLoginAccount
 
 # Functions
 def gotoSignUp():
     root.withdraw()
     signupAccount.signup(root)
+
+def gotoOwnerlogin():
+    root.withdraw()
+    ownerLoginAccount.new_window(root)
     
 def email_enter(event):
     if emailEntry.get() == 'Email':
@@ -113,8 +118,8 @@ canvas.create_image(0, 0, anchor=tk.NW, image=bg_image)
 canvas.create_rectangle(350, 25, 750, 625, fill='white', outline="#0C3B2E")
 
 # header
-label = tk.Label(canvas, text="LOGIN", font=('Courier', 30, 'bold'), bg="white", fg="#FFBA00")
-label.place(x=490, y=40)
+label = tk.Label(canvas, text="LOG IN", font=('Courier', 30, 'bold'), bg="white", fg="#FFBA00")
+label.place(x=495, y=40)
 labelcustomer = tk.Label(canvas, text="CUSTOMER", font=('Courier', 15, 'bold'), bg="white", fg="#FFBA00")
 labelcustomer.place(x=500, y=80)
 
@@ -147,7 +152,7 @@ adminLabel = tk.Label(canvas, text="Or Log in as", font=('Arial', 10), bg="white
 adminLabel.place(x=492, y=372)
 
 #log in as admin button
-adminBtn = tk.Button(canvas, text="Owner.", font=('Arial', 10, 'bold'), bd=0, bg="#FFFFFF", activebackground="#FFFFFF", fg="#FFA500", activeforeground="#725B32", cursor="hand2", width=6, command=gotoSignUp)
+adminBtn = tk.Button(canvas, text="Owner.", font=('Arial', 10, 'bold'), bd=0, bg="#FFFFFF", activebackground="#FFFFFF", fg="#FFA500", activeforeground="#725B32", cursor="hand2", width=6, command=gotoOwnerlogin)
 adminBtn.place(x=566, y=371)
 
 # create account
