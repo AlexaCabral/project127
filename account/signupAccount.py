@@ -112,7 +112,6 @@ def signup(parent):
                         mycursor.execute("SELECT COUNT(*) FROM customer WHERE email = %s",(email,))
                         print("query")
                                 
-                                
                         myresult = mycursor.fetchone()[0]
                         print(myresult)
                                 
