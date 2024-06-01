@@ -115,6 +115,8 @@ canvas.create_rectangle(350, 25, 750, 625, fill='white', outline="#0C3B2E")
 # header
 label = tk.Label(canvas, text="LOGIN", font=('Courier', 30, 'bold'), bg="white", fg="#FFBA00")
 label.place(x=490, y=40)
+labelcustomer = tk.Label(canvas, text="CUSTOMER", font=('Courier', 15, 'bold'), bg="white", fg="#FFBA00")
+labelcustomer.place(x=500, y=80)
 
 # enter email
 emailEntry = tk.Entry(canvas, width=25, font=('Courier', 18, 'bold'), bd=0, fg="#656565")
