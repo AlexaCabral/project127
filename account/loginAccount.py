@@ -142,12 +142,20 @@ pwBtn.place(x=680, y=230)
 loginBtn = tk.Button(canvas, text="Log In", font=('Courier', 16, 'bold'), bd=0, bg="#FFBA00", activebackground="#FFA500", fg="#725B32", activeforeground="white", cursor="hand2", width=20, command=login)
 loginBtn.place(x=425, y=330)
 
+#log in as admin text
+adminLabel = tk.Label(canvas, text="Or Log in as", font=('Arial', 10), bg="white", fg="#725B32")
+adminLabel.place(x=492, y=372)
+
+#log in as admin button
+adminBtn = tk.Button(canvas, text="Owner.", font=('Arial', 10, 'bold'), bd=0, bg="#FFFFFF", activebackground="#FFFFFF", fg="#FFA500", activeforeground="#725B32", cursor="hand2", width=6, command=gotoSignUp)
+adminBtn.place(x=566, y=371)
+
 # create account
-signupLabel = tk.Label(canvas, text="Don't have an account?", font=('Arial', 12), bg="white", fg="#725B32")
-signupLabel.place(x=396, y=590)
+signupLabel = tk.Label(canvas, text="Don't have an account?", font=('Arial', 10), bg="white", fg="#725B32")
+signupLabel.place(x=420, y=590)
 
 # create account button
-createBtn = tk.Button(canvas, text="Create an account.", font=('Arial', 11, 'bold'), bd=0, bg="#FFFFFF", activebackground="#FFFFFF", fg="#FFA500", activeforeground="#725B32", cursor="hand2", width=15, command=gotoSignUp)
+createBtn = tk.Button(canvas, text="Create an account.", font=('Arial', 10, 'bold'), bd=0, bg="#FFFFFF", activebackground="#FFFFFF", fg="#FFA500", activeforeground="#725B32", cursor="hand2", width=15, command=gotoSignUp)
 createBtn.place(x=560, y=588)
 
 root.mainloop()
