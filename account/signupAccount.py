@@ -156,6 +156,8 @@ def signup(parent):
     # header
     label = tk.Label(canvas, text="SIGN UP", font=('Courier', 30, 'bold'), bg="white", fg="#FFBA00")
     label.place(x=470, y=40)
+    labelcustomer = tk.Label(canvas, text="CUSTOMER", font=('Courier', 15, 'bold'), bg="white", fg="#FFBA00")
+    labelcustomer.place(x=505, y=80)
     
     # enter name
     nameEntry = tk.Entry(canvas, width=25, font=('Courier', 18, 'bold'), bd=0, fg="#656565")
