@@ -96,24 +96,22 @@ def signup(parent):
                         return
 
                     mycursor.execute("USE project")
-                    print("projec used...")
+                    print("project used...")
                             
-                    mycursor.execute("SELECT email FROM customer WHERE email = %s",(email,))
+                    mycursor.execute("SELECT COUNT(*) FROM customer WHERE email = %s",(email,))
                     print("query")
                             
                             
-                    myresult = mycursor.fetchone()
+                    myresult = mycursor.fetchone()[0]
                     print(myresult)
                             
-                    if myresult == (0,) or myresult == None:
+                    if myresult == 0:
                         # Insert into the database 
-                        mycursor.execute("INSERT INTO customer VALUES (%s, %s, %s)", (name, password, email))
-                        mycursor.commit()
+                        mycursor.execute("INSERT INTO customer(name, password, email) VALUES (%s, %s, %s)", (name, password, email))
                         
-                        mycursor.close()
-                        mydb.close()
+                        mydb.commit()
                                 
-                        messagebox.showinfo("Success", "All Set! Go back and log in your account.")
+                        messagebox.showinfo("Success", "All Set! Go back and log into your account.")
                     else:
                         messagebox.showerror("Invalid!", "Account already exists!")
                         return
