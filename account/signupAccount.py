@@ -5,6 +5,7 @@ import PIL
 from PIL import Image, ImageTk
 import requests
 from io import BytesIO
+import re
 
 
 def signup(parent):
@@ -67,6 +68,10 @@ def signup(parent):
         confirmPasswordEntry.config(show="")
         cpwBtn.config(command=chide)
     
+    def is_emailValid(email):
+        pattern = r'^[^@]+@[^@]+\.[^@]+$' 
+        return re.match(pattern, email) is not None
+    
     def signupacc():
         name = nameEntry.get()
         email = emailEntry.get()
@@ -77,47 +82,50 @@ def signup(parent):
             messagebox.showerror("Entry error", "Invalid Email or Password.")
         
         else:
-            valid = 0
+            pvalid = 0
+            
             if(password==cpassword):
                 for char in password:
                     if char.isdigit():
-                        valid = 1
+                        pvalid = 1
                         break
                 
-                if valid == 0:
-                    messagebox.showerror("Entry error", "Password must contain atleast one number [0-9].")
+                if pvalid == 0:
+                    messagebox.showerror("Entry error", "Password must contain atleast one number [0-9].")                   
+                    
                 else:
-                    try:
-                        mydb = mysql.connector.connect(host='localhost', user='root', password='server', database='project')
-                        mycursor = mydb.cursor()
-                        print("Connected to database...")
-                    except:
-                        messagebox.showerror("Connection", "Failed")
+                    if not is_emailValid(email):
+                        messagebox.showerror("Entry error", "Email must follow the format: __@__.__")
                         return
+                    else:  
+                        try:
+                            mydb = mysql.connector.connect(host='localhost', user='root', password='server', database='project')
+                            mycursor = mydb.cursor()
+                            print("Connected to database...")
+                        except:
+                            messagebox.showerror("Connection", "Failed")
+                            return
 
-                    mycursor.execute("USE project")
-                    print("project used...")
-                            
-                    mycursor.execute("SELECT COUNT(*) FROM customer WHERE email = %s",(email,))
-                    print("query")
-                            
-                            
-                    myresult = mycursor.fetchone()[0]
-                    print(myresult)
-                            
-                    if myresult == 0:
-                        # Insert into the database 
-                        mycursor.execute("INSERT INTO customer(name, password, email) VALUES (%s, %s, %s)", (name, password, email))
-                        
-                        mydb.commit()
+                        mycursor.execute("USE project")
+                        print("project used...")
                                 
-                        messagebox.showinfo("Success", "All Set! Go back and log into your account.")
-                    else:
-                        messagebox.showerror("Invalid!", "Account already exists!")
-                        return
-            else:
-                messagebox.showerror("Entry error", "Invalid Email or Password.")
-                return
+                        mycursor.execute("SELECT COUNT(*) FROM customer WHERE email = %s",(email,))
+                        print("query")
+                                
+                                
+                        myresult = mycursor.fetchone()[0]
+                        print(myresult)
+                                
+                        if myresult == 0:
+                            # Insert into the database 
+                            mycursor.execute("INSERT INTO customer(name, password, email) VALUES (%s, %s, %s)", (name, password, email))
+                            
+                            mydb.commit()
+                                    
+                            messagebox.showinfo("Success", "All Set! Go back and log into your account.")
+                        else:
+                            messagebox.showerror("Invalid!", "Account already exists!")
+                            return
         
     # sign up window
     signupWindow = tk.Toplevel(parent)
