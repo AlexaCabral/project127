@@ -53,4 +53,4 @@ CREATE TABLE customer(
 -- error
 -- INSERT INTO customer VALUES(1, "customer", "password", "customer"); 
 --valid
-INSERT INTO customer VALUES(1, "customer", "p1", "customer@gugol.kom"); 
+INSERT INTO customer VALUES(1, "customer", "p1", "customer@gugol.kom");
