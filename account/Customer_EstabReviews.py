@@ -5,7 +5,7 @@ import mysql.connector
 import Customer_FoodItems
 
 
-def establishmentReviews(parent, establishment_id):
+def establishmentReviews(parent, establishment_id, account_id):
 
     def fetch_reviews(estab_id):
         try:
@@ -21,7 +21,7 @@ def establishmentReviews(parent, establishment_id):
             messagebox.showerror("Connection", f"Failed: {err}")
             return []
 
-        query = f"SELECT review_id, review_text, rating, account_id, establishment_id FROM food_review WHERE establishment_id = {estab_id}"
+        query = f"SELECT review_id, review_text, rating FROM food_review WHERE establishment_id = {estab_id} AND account_id = {account_id}"
         database_cursor.execute(query)
         results = database_cursor.fetchall()
 
@@ -33,8 +33,8 @@ def establishmentReviews(parent, establishment_id):
                 "review_id": r[0],
                 "review_text": r[1],
                 "rating": r[2],
-                "account_id": r[3],
-                "establishment_id": r[4],
+                "account_id": account_id,
+                "establishment_id": establishment_id,
             }
             for r in results
         ]
@@ -60,8 +60,8 @@ def establishmentReviews(parent, establishment_id):
             (
                 review["review_text"],
                 review["rating"],
-                review["account_id"],
-                review["establishment_id"],
+                account_id,
+                establishment_id,
             ),
         )
         database.commit()
@@ -86,13 +86,12 @@ def establishmentReviews(parent, establishment_id):
             messagebox.showerror("Connection", f"Failed: {err}")
             return
 
-        query = "UPDATE food_review SET review_text = %s, rating = %s, account_id = %s WHERE review_id = %s"
+        query = "UPDATE food_review SET review_text = %s, rating = %s WHERE review_id = %s"
         database_cursor.execute(
             query,
             (
                 review["review_text"],
                 review["rating"],
-                review["account_id"],
                 review["review_id"],
             ),
         )
@@ -146,23 +145,14 @@ def establishmentReviews(parent, establishment_id):
             self.rating_entry = ttk.Entry(self.top)
             self.rating_entry.pack()
 
-            tk.Label(self.top, text="Account ID:").pack()
-            self.account_id_entry = ttk.Entry(self.top)
-            self.account_id_entry.pack()
-
-            tk.Label(self.top, text="Establishment ID:").pack()
-            self.establishment_id_entry = ttk.Entry(self.top)
-            self.establishment_id_entry.insert(0, establishment_id)
-            self.establishment_id_entry.pack()
-
             ttk.Button(self.top, text="Add", command=self.add).pack()
 
         def add(self):
             self.result = {
                 "review_text": self.review_text_entry.get(),
                 "rating": int(self.rating_entry.get()),
-                "account_id": int(self.account_id_entry.get()),
-                "establishment_id": int(self.establishment_id_entry.get()),
+                "account_id": account_id,
+                "establishment_id": establishment_id,
             }
             self.top.destroy()
 
@@ -184,19 +174,13 @@ def establishmentReviews(parent, establishment_id):
             self.rating_entry.pack()
             self.rating_entry.insert(0, review["rating"])
 
-            tk.Label(self.top, text="Account ID:").pack()
-            self.account_id_entry = ttk.Entry(self.top)
-            self.account_id_entry.pack()
-            self.account_id_entry.insert(0, review["account_id"])
-
             ttk.Button(self.top, text="Update", command=self.update).pack()
 
         def update(self):
             self.result = {
                 "review_id": self.review["review_id"],
                 "review_text": self.review_text_entry.get(),
-                "rating": int(self.rating_entry.get()),
-                "account_id": int(self.account_id_entry.get()),
+                "rating": int(self.rating_entry.get())
             }
             self.top.destroy()
 

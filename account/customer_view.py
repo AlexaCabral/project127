@@ -62,7 +62,7 @@ def customer_food_establishment(account_id):
     def check_reviews(estab_id):
         print("Check Food Reviews button clicked")
         foodestabWindow.withdraw()
-        Customer_EstabReviews.establishmentReviews(foodestabWindow, estab_id)
+        Customer_EstabReviews.establishmentReviews(foodestabWindow, estab_id, account_id)
 
     def clear_boxes():
         for widget in foodestabWindow.grid_slaves():
