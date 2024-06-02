@@ -160,8 +160,6 @@ class FoodItemWindow:
         self.fetch_data_fooditem()
         
         
-        
-        
     # ====================== back end ======================
     # show data food item
     def fetch_data_fooditem(self):
@@ -259,6 +257,10 @@ class FoodItemWindow:
                 for i in rows:
                     self.Fooditem_Table.insert("", END, values=i)
                 mydb.commit()
+            else:
+                self.Fooditem_Table.delete(*self.Fooditem_Table.get_children())
+                mydb.commit()
+                
             mydb.close()
                      
         except:

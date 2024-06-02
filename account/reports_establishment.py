@@ -12,7 +12,7 @@ class EstablishmentWindow:
         self.root.configure(bg="white")
         
         # title
-        title_label = Label(self.root, text="Establishment Details", font=('Courier', 25, 'bold'), bg="#FFBA00", fg="#725B32")
+        title_label = Label(self.root, text="Establishment Details", font=('Courier', 25, 'bold'), bg="#FFBA00", fg="#302400")
         title_label.pack(fill="x")  
         
         # right-side
@@ -20,7 +20,7 @@ class EstablishmentWindow:
         frame_label_right.place(x=0, y=45, width=1100, height=500)
         
         # filter label
-        filter_label = Label(frame_label_right, text="Filter:", font=('Courier', 12, 'bold'), bg="#FFBA00", fg="#725B32")
+        filter_label = Label(frame_label_right, text="Filter:", font=('Courier', 12, 'bold'), bg="#FFBA00", fg="#302400")
         filter_label.grid(row=0, column=0, sticky=W, padx=2)
         
         # drop down filter
@@ -32,7 +32,7 @@ class EstablishmentWindow:
         
         
         # search label
-        search_label = Label(frame_label_right, text="Search By:", font=('Courier', 12, 'bold'), bg="#FFBA00", fg="#725B32")
+        search_label = Label(frame_label_right, text="Search By:", font=('Courier', 12, 'bold'), bg="#FFBA00", fg="#302400")
         search_label.grid(row=0, column=2, sticky=W, padx=2)
         
         # drop down
@@ -48,11 +48,11 @@ class EstablishmentWindow:
         search_entry.grid(row=0, column=4, padx=2)
         
         # search button
-        search_btn = Button(frame_label_right, text="Search", font=('Courier', 12, 'bold'), bd=0, bg="#FFBA00", activebackground="#FFA500", fg="#725B32", activeforeground="white", cursor="hand2", width=10, command=self.search)
+        search_btn = Button(frame_label_right, text="Search", font=('Courier', 12, 'bold'), bd=0, bg="#FFBA00", activebackground="#FFA500", fg="#302400", activeforeground="white", cursor="hand2", width=10, command=self.search)
         search_btn.grid(row=0, column=5, padx=5)
         
         # show all button
-        show_btn = Button(frame_label_right, text="Show All", font=('Courier', 12, 'bold'), bd=0, bg="#FFBA00", activebackground="#FFA500", fg="#725B32", activeforeground="white", cursor="hand2", width=10, command=self.fetch_data)
+        show_btn = Button(frame_label_right, text="Show All", font=('Courier', 12, 'bold'), bd=0, bg="#FFBA00", activebackground="#FFA500", fg="#302400", activeforeground="white", cursor="hand2", width=10, command=self.fetch_data)
         show_btn.grid(row=0, column=6, padx=1)
 
         # ====================== results ======================
@@ -107,9 +107,13 @@ class EstablishmentWindow:
                 for i in rows:
                     self.Establishment_Table.insert("", END, values=i)
                 mydb.commit()
+            
+            
+            else:
+                self.Establishment_Table.delete(*self.Establishment_Table.get_children())
+                mydb.commit()
+                
             mydb.close()
-                
-                
                 
         except:
             messagebox.showerror("Connection", "Failed")
