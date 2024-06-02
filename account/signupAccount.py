@@ -27,13 +27,13 @@ def signup(parent):
             emailEntry.insert(0, "Email")
             
     def password_enter(event):
-        if passwordEntry.get() == 'Password':
+        if passwordEntry.get() == 'cyrene':
             passwordEntry.delete(0, 'end')
         passwordEntry.config(show="*")
     
     def password_leave(event):
         if passwordEntry.get() == '':
-            passwordEntry.insert(0, "Password")
+            passwordEntry.insert(0, "cyrene")
             passwordEntry.config(show="")
     
     def cpassword_enter(event):
@@ -48,7 +48,7 @@ def signup(parent):
     
     def hide():
         pwBtn.config(text="Show")
-        if passwordEntry.get() != "Password":
+        if passwordEntry.get() != "cyrene ":
             passwordEntry.config(show="*")
         pwBtn.config(command=show)
 
@@ -78,7 +78,7 @@ def signup(parent):
         password = passwordEntry.get()
         cpassword = confirmPasswordEntry.get()
         
-        if (email == "" or email == "Email") or (password == "" or password == "Password") or (cpassword == "" or cpassword == "Confirm Password"):
+        if (email == "" or email == "Email") or (password == "" or password == "cyrene") or (cpassword == "" or cpassword == "Confirm Password"):
             messagebox.showerror("Entry error", "Invalid Email or Password.")
         
         else:
@@ -175,7 +175,7 @@ def signup(parent):
     
     # enter password
     passwordEntry = tk.Entry(canvas, width=20, font=('Courier', 18, 'bold'), bd=0, fg="#656565")
-    passwordEntry.insert(0, "Password")
+    passwordEntry.insert(0, "cyrene")
     passwordEntry.bind("<FocusIn>", password_enter)
     passwordEntry.bind("<FocusOut>", password_leave)
     tk.Frame(signupWindow, width=350, height=2, bg="#656565").place(x=380, y=295)

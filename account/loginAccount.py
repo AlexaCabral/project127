@@ -35,19 +35,19 @@ def email_leave(event):
         emailEntry.insert(0, "Email")
 
 def password_enter(event):
-    if passwordEntry.get() == 'Password':
+    if passwordEntry.get() == 'cyrene':
         passwordEntry.delete(0, 'end')
     passwordEntry.config(show="*")
     
 def password_leave(event):
     if passwordEntry.get() == '':
-        passwordEntry.insert(0, "Password")
+        passwordEntry.insert(0, "cyrene")
         passwordEntry.config(show="")
         
         
 def hide():
     pwBtn.config(text="Show")
-    if passwordEntry.get() != "Password":
+    if passwordEntry.get() != "cyrene":
         passwordEntry.config(show="*")
     pwBtn.config(command=show)
 
@@ -60,12 +60,12 @@ def login():
     email = emailEntry.get()
     password = passwordEntry.get()
     
-    if (email == "" or email == "Email") or (password == "" or password == "Password"):
+    if (email == "" or email == "Email") or (password == "" or password == "cyrene"):
         messagebox.showerror("Entry error", "Invalid Email or Password.")
     
     else:
         try:
-            mydb = mysql.connector.connect(host='localhost', user='root', password='chancekababy2021', database='project')
+            mydb = mysql.connector.connect(host='localhost', user='root', password='cyrene', database='project')
             mycursor = mydb.cursor()
             print("Connected to database...")
         except:
@@ -126,7 +126,7 @@ emailEntry.place(x=380, y=190)
 
 # enter password
 passwordEntry = tk.Entry(canvas, width=20, font=('Courier', 18, 'bold'), bd=0, fg="#656565")
-passwordEntry.insert(0, "Password")
+passwordEntry.insert(0, "cyrene")
 passwordEntry.bind("<FocusIn>", password_enter)
 passwordEntry.bind("<FocusOut>", password_leave)
 tk.Frame(root, width=350, height=2, bg="#656565").place(x=380, y=255)
