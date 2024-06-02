@@ -13,7 +13,7 @@ def owner_food_establishment(account_id):
             database = mysql.connector.connect(
                 host="localhost",
                 user="root",
-                password="chancekababy2021",
+                password="jdrubianbscs",
                 database="project",
             )
             print("Connected to database...")
@@ -273,6 +273,7 @@ def owner_food_establishment(account_id):
                 ),
             )
             check_items_button.pack(side="left", padx=5)
+    
 
     def check_reviews():
         print(

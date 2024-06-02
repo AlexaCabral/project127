@@ -1,7 +1,8 @@
 import tkinter as tk
 from tkinter import messagebox
 import mysql.connector
-
+from tkinter.font import Font
+from tkinter import ttk
 
 def owner_food_item(establishment_id):
     def fetch_food_items(establishment_id, name):
@@ -9,7 +10,7 @@ def owner_food_item(establishment_id):
             database = mysql.connector.connect(
                 host="localhost",
                 user="root",
-                password="chancekababy2021",
+                password="jdrubianbscs",
                 database="project",
             )
             database_cursor = database.cursor()
@@ -35,7 +36,7 @@ def owner_food_item(establishment_id):
             database = mysql.connector.connect(
                 host="localhost",
                 user="root",
-                password="chancekababy2021",
+                password="jdrubianbscs",
                 database="project",
             )
             database_cursor = database.cursor()
@@ -71,7 +72,7 @@ def owner_food_item(establishment_id):
             database = mysql.connector.connect(
                 host="localhost",
                 user="root",
-                password="chancekababy2021",
+                password="jdrubianbscs",
                 database="project",
             )
             database_cursor = database.cursor()
@@ -96,7 +97,7 @@ def owner_food_item(establishment_id):
             database = mysql.connector.connect(
                 host="localhost",
                 user="root",
-                password="chancekababy2021",
+                password="jdrubianbscs",
                 database="project",
             )
             database_cursor = database.cursor()
@@ -130,24 +131,30 @@ def owner_food_item(establishment_id):
 
         add_item_window = tk.Toplevel(root)
         add_item_window.title("Add Food Item")
+        add_item_window.configure(bg="white")
+        add_item_window.geometry("400x300")
 
-        tk.Label(add_item_window, text="Price:").pack(pady=5)
-        price_entry = tk.Entry(add_item_window)
-        price_entry.pack(pady=5)
-
-        tk.Label(add_item_window, text="Description:").pack(pady=5)
-        desc_entry = tk.Entry(add_item_window)
-        desc_entry.pack(pady=5)
-
-        tk.Label(add_item_window, text="Name:").pack(pady=5)
-        name_entry = tk.Entry(add_item_window)
+        tk.Label(add_item_window, text="Name:", bg="#FFFFFF", font=("Helvetica", 8, "bold")).pack(pady=5)
+        name_entry = tk.Entry(add_item_window, bd=0, bg="#FFFFFF", width=40, justify='center')
         name_entry.pack(pady=5)
+        tk.Frame(add_item_window, height=2, bd=1, relief='flat', bg="#656565").pack(fill='x', padx=5)
 
-        tk.Label(add_item_window, text="Food Types (comma-separated):").pack(pady=5)
-        food_types_entry = tk.Entry(add_item_window)
+        tk.Label(add_item_window, text="Price:", bg="#FFFFFF", font=("Helvetica", 8, "bold")).pack(pady=5)
+        price_entry = tk.Entry(add_item_window, bd=0, bg="#FFFFFF", width=40, justify='center')
+        price_entry.pack(pady=5)
+        tk.Frame(add_item_window, height=2, bd=1, relief='flat', bg="#656565").pack(fill='x', padx=5)
+
+        tk.Label(add_item_window, text="Description:", bg="#FFFFFF", font=("Helvetica", 8, "bold")).pack(pady=5)
+        desc_entry = tk.Entry(add_item_window, bd=0, bg="#FFFFFF", width=40, justify='center')
+        desc_entry.pack(pady=5)
+        tk.Frame(add_item_window, height=2, bd=1, relief='flat', bg="#656565").pack(fill='x', padx=5)
+
+        tk.Label(add_item_window, text="Food Types (comma-separated):", bg="#FFFFFF", font=("Helvetica", 8, "bold")).pack(pady=5)
+        food_types_entry = tk.Entry(add_item_window, bd=0, bg="#FFFFFF", width=40, justify='center')
         food_types_entry.pack(pady=5)
+        tk.Frame(add_item_window, height=2, bd=1, relief='flat', bg="#656565").pack(fill='x', padx=5)
 
-        submit_btn = tk.Button(add_item_window, text="Submit", command=submit_item)
+        submit_btn = tk.Button(add_item_window, text="Submit", command=submit_item, bd=0, bg="#B46617", activebackground="#FFBA00", fg="#FFFFFF", activeforeground="#FFFFFF", cursor="hand2", width=10)
         submit_btn.pack(pady=20)
 
     def update_food_types(item_id, new_food_types):
@@ -156,7 +163,7 @@ def owner_food_item(establishment_id):
             database = mysql.connector.connect(
                 host="localhost",
                 user="root",
-                password="chancekababy2021",
+                password="jdrubianbscs",
                 database="project",
             )
             database_cursor = database.cursor()
@@ -198,37 +205,41 @@ def owner_food_item(establishment_id):
         row = 1
         col = 0
         for item in items:
-            card = tk.Frame(items_frame, bd=2, relief="solid", padx=10, pady=10)
-            card.grid(row=row, column=col, padx=10, pady=10)
+            card = tk.Frame(items_frame, bd=1, relief="solid", padx=10, pady=10, bg="#FFFFFF")
+            card.grid(row=row, column=col, padx=20, pady=20, sticky="nsew")
 
             name_var = tk.StringVar(value=item[3])
             desc_var = tk.StringVar(value=item[2])
             price_var = tk.StringVar(value=f"{item[1]:.2f}")
             food_types_var = tk.StringVar(value=", ".join(get_food_types(item[0])))
 
-            tk.Label(card, text="Name:").pack(pady=(5, 0))
+            tk.Label(card, text="Name", font=("Helvetica", 10, "bold"), bg="#FFFFFF", fg="#B46617").pack(pady=(5, 0))
             name_entry = tk.Entry(
-                card, textvariable=name_var, font=("Arial", 16, "bold"), state="normal"
+                card, textvariable=name_var, font=("Helvetica", 14, "bold"), state="normal", bg="#FFFFFF", fg="#FFBA00", bd=0, justify='center'
             )
             name_entry.pack(pady=(5, 0))
+            tk.Frame(card, height=2, bd=1, relief='flat', bg="#656565").pack(fill='x', padx=5)
 
-            tk.Label(card, text="Description:").pack(pady=(5, 0))
+            tk.Label(card, text="Description", font=("Helvetica", 10, "bold"), bg="#FFFFFF", fg="#B46617").pack(pady=(5, 0))
             desc_entry = tk.Entry(
-                card, textvariable=desc_var, font=("Arial", 12), state="normal"
+                card, textvariable=desc_var, font=("Helvetica", 12), state="normal", bg="#FFFFFF", fg="#B46617", bd=0, justify='center'
             )
             desc_entry.pack(pady=(5, 0))
+            tk.Frame(card, height=2, bd=1, relief='flat', bg="#656565").pack(fill='x', padx=5)
 
-            tk.Label(card, text="Price:").pack(pady=(5, 0))
+            tk.Label(card, text="Price", font=("Helvetica", 10, "bold"), bg="#FFFFFF", fg="#B46617").pack(pady=(5, 0))
             price_entry = tk.Entry(
-                card, textvariable=price_var, font=("Arial", 12), state="normal"
+                card, textvariable=price_var, font=("Helvetica", 12), state="normal", bg="#FFFFFF", fg="#B46617", bd=0, justify='center'
             )
             price_entry.pack(pady=(5, 0))
+            tk.Frame(card, height=2, bd=1, relief='flat', bg="#656565").pack(fill='x', padx=5)
 
-            tk.Label(card, text="Food Types:").pack(pady=(5, 0))
+            tk.Label(card, text="Food Types", font=("Helvetica", 10, "bold"), bg="#FFFFFF", fg="#B46617").pack(pady=(5, 0))
             food_types_entry = tk.Entry(
-                card, textvariable=food_types_var, font=("Arial", 12), state="normal"
+                card, textvariable=food_types_var, font=("Helvetica", 12), state="normal", bg="#FFFFFF", fg="#B46617", bd=0, justify='center'
             )
             food_types_entry.pack(pady=(5, 0))
+            tk.Frame(card, height=2, bd=1, relief='flat', bg="#656565").pack(fill='x', padx=5)
 
             def save_changes(
                 item_id,
@@ -269,6 +280,13 @@ def owner_food_item(establishment_id):
                     price_entry1,
                     food_types_entry1,
                 ),
+                bg="#B46617",
+                bd=0, 
+                fg="#FFFFFF",
+                activebackground="#FFBA00",
+                activeforeground="white", 
+                cursor="hand2",
+                width=10,
             )
             save_btn.pack(pady=(10, 0))
 
@@ -276,6 +294,13 @@ def owner_food_item(establishment_id):
                 card,
                 text="Delete",
                 command=lambda item_id=item[0]: delete_food_item(item_id),
+                bg="#B46617",
+                fg="#FFFFFF",
+                bd=0,
+                activebackground="#FFBA00",
+                activeforeground="white", 
+                cursor="hand2",
+                width=10,
             )
             delete_btn.pack(pady=(10, 0))
 
@@ -289,7 +314,7 @@ def owner_food_item(establishment_id):
             database = mysql.connector.connect(
                 host="localhost",
                 user="root",
-                password="chancekababy2021",
+                password="jdrubianbscs",
                 database="project",
             )
             database_cursor = database.cursor()
@@ -313,31 +338,42 @@ def owner_food_item(establishment_id):
     root = tk.Toplevel()
     root.title("Food Items")
     root.geometry("1100x650")
+    root.configure(bg="white")
 
     # Search bar
-    search_frame = tk.Frame(root, bg="#D3D3D3")
-    search_frame.pack(side=tk.TOP, fill=tk.X, padx=10, pady=10)
+    search_frame = tk.Frame(root, bg="white")
+    search_frame.place(relx=0.5, rely=0.1, anchor="center")  # Center horizontally, 10% from the top
 
+    # New label added before the search label
     tk.Label(
-        search_frame, text="Search Establishments:", font=("Arial", 14), bg="#D3D3D3"
-    ).pack(side=tk.LEFT, padx=10)
+        search_frame, text="FOOD ITEMS", font=("Helvetica", 25, "bold"), bg="white", fg="#FFBA00"
+    ).pack(pady=(0, 5))
 
-    search_entry = tk.Entry(search_frame, font=("Arial", 14), width=30)
+    search_inner_frame = tk.Frame(search_frame, bg="white")
+    search_inner_frame.pack()
+
+    # tk.Label(
+    #     search_inner_frame, text="Search Food Item:", font=("Helvetica", 18, "bold"), bg="white", fg="#FFBA00", bd=0
+    # ).pack(side=tk.LEFT, padx=10)
+
+    search_entry = tk.Entry(search_inner_frame, font=("Helvetica", 14, "bold"), width=30, bg="white")
     search_entry.pack(side=tk.LEFT, padx=10)
 
     search_btn = tk.Button(
-        search_frame, text="Search", font=("Arial", 14), command=on_search
+        search_inner_frame, text="Search", font=("Helvetica", 12, "bold"), command=on_search, bg="#B46617", bd=0, activebackground="#FFBA00", fg="white", activeforeground="#FFFFFF", cursor="hand2"
     )
     search_btn.pack(side=tk.LEFT, padx=10)
 
     # Items frame
-    items_frame = tk.Frame(root)
-    items_frame.pack(pady=20, fill=tk.BOTH, expand=True)
+    items_frame = tk.Frame(root, bg="white")
+    items_frame.place(relx=0.5, rely=0.5, anchor="center")  # Center horizontally and vertically
 
     on_search()
 
     # Add Food Item button
-    add_item_btn = tk.Button(root, text="Add Food Item", command=open_add_item_window)
-    add_item_btn.pack(pady=10)
+    add_item_btn = tk.Button(root, text="Add Food Item", font=('Helvetica', 15, 'bold'), bd=0, bg="#B46617", activebackground="#FFBA00", fg="#FFFFFF", activeforeground="#FFFFFF", cursor="hand2", command=open_add_item_window, width=20)
+    add_item_btn.place(relx=0.5, rely=0.9, anchor="center")  # Center horizontally, 90% from the top
 
     root.mainloop()
+
+

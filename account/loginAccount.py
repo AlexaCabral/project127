@@ -65,7 +65,7 @@ def login():
     
     else:
         try:
-            mydb = mysql.connector.connect(host='localhost', user='root', password='chancekababy2021', database='project')
+            mydb = mysql.connector.connect(host='localhost', user='root', password='jdrubianbscs', database='project')
             mycursor = mydb.cursor()
             print("Connected to database...")
         except:
