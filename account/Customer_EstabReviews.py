@@ -1,26 +1,135 @@
 import tkinter as tk
 from tkinter import ttk
+from tkinter import messagebox
+import mysql.connector
 import Customer_FoodItems
 
-reviews = [
-    {"review_id": "001", "reviewer_name": "John Doe", "rating": 5, "review_text": "Amazing food and great service!", "establishment": "Restaurant A"},
-    {"review_id": "002", "reviewer_name": "Jane Smith", "rating": 4, "review_text": "Good coffee but a bit pricey.", "establishment": "Cafe B"},
-    {"review_id": "003", "reviewer_name": "Emily Davis", "rating": 5, "review_text": "Best chocolate cake I've ever had!", "establishment": "Bakery C"},
-    {"review_id": "004", "reviewer_name": "Michael Brown", "rating": 3, "review_text": "Nice atmosphere, but the drinks were average.", "establishment": "Bar D"},
-]
 
-def establishmentReviews(parent):
+def establishmentReviews(parent, establishment_id):
+
+    def fetch_reviews(estab_id):
+        try:
+            database = mysql.connector.connect(
+                host="localhost",
+                user="root",
+                password="chancekababy2021",
+                database="project",
+            )
+            database_cursor = database.cursor()
+            print("Connected to database...")
+        except mysql.connector.Error as err:
+            messagebox.showerror("Connection", f"Failed: {err}")
+            return []
+
+        query = f"SELECT review_id, review_text, rating, account_id, establishment_id FROM food_review WHERE establishment_id = {estab_id}"
+        database_cursor.execute(query)
+        results = database_cursor.fetchall()
+
+        database_cursor.close()
+        database.close()
+
+        reviews = [
+            {
+                "review_id": r[0],
+                "review_text": r[1],
+                "rating": r[2],
+                "account_id": r[3],
+                "establishment_id": r[4],
+            }
+            for r in results
+        ]
+        return reviews
+
+    def add_review_to_db(review):
+        try:
+            database = mysql.connector.connect(
+                host="localhost",
+                user="root",
+                password="chancekababy2021",
+                database="project",
+            )
+            database_cursor = database.cursor()
+            print("Connected to database...")
+        except mysql.connector.Error as err:
+            messagebox.showerror("Connection", f"Failed: {err}")
+            return None
+
+        query = "INSERT INTO food_review (review_text, rating, account_id, establishment_id) VALUES (%s, %s, %s, %s)"
+        database_cursor.execute(
+            query,
+            (
+                review["review_text"],
+                review["rating"],
+                review["account_id"],
+                review["establishment_id"],
+            ),
+        )
+        database.commit()
+
+        review_id = database_cursor.lastrowid
+        database_cursor.close()
+        database.close()
+
+        return review_id
+
+    def update_review_in_db(review):
+        try:
+            database = mysql.connector.connect(
+                host="localhost",
+                user="root",
+                password="chancekababy2021",
+                database="project",
+            )
+            database_cursor = database.cursor()
+            print("Connected to database...")
+        except mysql.connector.Error as err:
+            messagebox.showerror("Connection", f"Failed: {err}")
+            return
+
+        query = "UPDATE food_review SET review_text = %s, rating = %s, account_id = %s WHERE review_id = %s"
+        database_cursor.execute(
+            query,
+            (
+                review["review_text"],
+                review["rating"],
+                review["account_id"],
+                review["review_id"],
+            ),
+        )
+        database.commit()
+
+        database_cursor.close()
+        database.close()
+
+    def delete_review_from_db(review_id):
+        try:
+            database = mysql.connector.connect(
+                host="localhost",
+                user="root",
+                password="chancekababy2021",
+                database="project",
+            )
+            database_cursor = database.cursor()
+            print("Connected to database...")
+        except mysql.connector.Error as err:
+            messagebox.showerror("Connection", f"Failed: {err}")
+            return
+
+        query = "DELETE FROM food_review WHERE review_id = %s"
+        database_cursor.execute(query, (review_id,))
+        database.commit()
+
+        database_cursor.close()
+        database.close()
 
     def add_review():
         dialog = AddReviewDialog(estabReviews)
         estabReviews.wait_window(dialog.top)
         if dialog.result:
-            reviews.append(dialog.result)
-            create_new_box(dialog.result)
-
-    def view_food_items():
-    # Implement functionality to view food items
-        pass
+            review_id = add_review_to_db(dialog.result)
+            if review_id:
+                dialog.result["review_id"] = review_id
+                create_new_box(dialog.result)
 
     class AddReviewDialog:
         def __init__(self, parent):
@@ -29,35 +138,31 @@ def establishmentReviews(parent):
             self.top.geometry("300x300")
             self.result = None
 
-            tk.Label(self.top, text="Review ID:").pack()
-            self.review_id_entry = ttk.Entry(self.top)
-            self.review_id_entry.pack()
-
-            tk.Label(self.top, text="Reviewer Name:").pack()
-            self.reviewer_name_entry = ttk.Entry(self.top)
-            self.reviewer_name_entry.pack()
+            tk.Label(self.top, text="Review Text:").pack()
+            self.review_text_entry = ttk.Entry(self.top)
+            self.review_text_entry.pack()
 
             tk.Label(self.top, text="Rating (1-5):").pack()
             self.rating_entry = ttk.Entry(self.top)
             self.rating_entry.pack()
 
-            tk.Label(self.top, text="Review Text:").pack()
-            self.review_text_entry = ttk.Entry(self.top)
-            self.review_text_entry.pack()
+            tk.Label(self.top, text="Account ID:").pack()
+            self.account_id_entry = ttk.Entry(self.top)
+            self.account_id_entry.pack()
 
-            tk.Label(self.top, text="Establishment:").pack()
-            self.establishment_entry = ttk.Entry(self.top)
-            self.establishment_entry.pack()
+            tk.Label(self.top, text="Establishment ID:").pack()
+            self.establishment_id_entry = ttk.Entry(self.top)
+            self.establishment_id_entry.insert(0, establishment_id)
+            self.establishment_id_entry.pack()
 
             ttk.Button(self.top, text="Add", command=self.add).pack()
 
         def add(self):
             self.result = {
-                "review_id": self.review_id_entry.get(),
-                "reviewer_name": self.reviewer_name_entry.get(),
-                "rating": int(self.rating_entry.get()),
                 "review_text": self.review_text_entry.get(),
-                "establishment": self.establishment_entry.get(),
+                "rating": int(self.rating_entry.get()),
+                "account_id": int(self.account_id_entry.get()),
+                "establishment_id": int(self.establishment_id_entry.get()),
             }
             self.top.destroy()
 
@@ -69,40 +174,29 @@ def establishmentReviews(parent):
             self.result = None
             self.review = review
 
-            tk.Label(self.top, text="Review ID:").pack()
-            self.review_id_entry = ttk.Entry(self.top)
-            self.review_id_entry.pack()
-            self.review_id_entry.insert(0, review["review_id"])
-
-            tk.Label(self.top, text="Reviewer Name:").pack()
-            self.reviewer_name_entry = ttk.Entry(self.top)
-            self.reviewer_name_entry.pack()
-            self.reviewer_name_entry.insert(0, review["reviewer_name"])
+            tk.Label(self.top, text="Review Text:").pack()
+            self.review_text_entry = ttk.Entry(self.top)
+            self.review_text_entry.pack()
+            self.review_text_entry.insert(0, review["review_text"])
 
             tk.Label(self.top, text="Rating (1-5):").pack()
             self.rating_entry = ttk.Entry(self.top)
             self.rating_entry.pack()
             self.rating_entry.insert(0, review["rating"])
 
-            tk.Label(self.top, text="Review Text:").pack()
-            self.review_text_entry = ttk.Entry(self.top)
-            self.review_text_entry.pack()
-            self.review_text_entry.insert(0, review["review_text"])
-
-            tk.Label(self.top, text="Establishment:").pack()
-            self.establishment_entry = ttk.Entry(self.top)
-            self.establishment_entry.pack()
-            self.establishment_entry.insert(0, review["establishment"])
+            tk.Label(self.top, text="Account ID:").pack()
+            self.account_id_entry = ttk.Entry(self.top)
+            self.account_id_entry.pack()
+            self.account_id_entry.insert(0, review["account_id"])
 
             ttk.Button(self.top, text="Update", command=self.update).pack()
 
         def update(self):
             self.result = {
-                "review_id": self.review_id_entry.get(),
-                "reviewer_name": self.reviewer_name_entry.get(),
-                "rating": int(self.rating_entry.get()),
+                "review_id": self.review["review_id"],
                 "review_text": self.review_text_entry.get(),
-                "establishment": self.establishment_entry.get(),
+                "rating": int(self.rating_entry.get()),
+                "account_id": int(self.account_id_entry.get()),
             }
             self.top.destroy()
 
@@ -112,44 +206,68 @@ def establishmentReviews(parent):
         row_position = total_boxes // 3 + 1
         column_position = total_boxes % 3
 
-        new_box_frame.grid(row=row_position, column=column_position, padx=20, pady=30, sticky="nsew")
+        new_box_frame.grid(
+            row=row_position, column=column_position, padx=20, pady=30, sticky="nsew"
+        )
 
-        reviewer_name_label = tk.Label(new_box_frame, text=review["reviewer_name"])
+        reviewer_name_label = tk.Label(new_box_frame, text=review["account_id"])
         reviewer_name_label.pack(expand=True)
 
-        details_label = tk.Label(new_box_frame, text=f"ID: {review['review_id']}\nRating: {review['rating']}\nReview: {review['review_text']}\nEstablishment: {review['establishment']}")
+        details_label = tk.Label(
+            new_box_frame,
+            text=f"ID: {review['review_id']}\nRating: {review['rating']}\nReview: {review['review_text']}\nEstablishment: {review['establishment_id']}",
+        )
         details_label.pack(expand=True)
 
-        edit_button = ttk.Button(new_box_frame, text="Edit", command=lambda: edit_review(new_box_frame, review))
+        edit_button = ttk.Button(
+            new_box_frame,
+            text="Edit",
+            command=lambda: edit_review(new_box_frame, review),
+        )
         edit_button.pack(side="left", padx=5)
 
-        delete_box_button = ttk.Button(new_box_frame, text="Delete", command=lambda: delete_box(new_box_frame))
+        delete_box_button = ttk.Button(
+            new_box_frame,
+            text="Delete",
+            command=lambda: delete_box(new_box_frame, review["review_id"]),
+        )
         delete_box_button.pack(side="left", padx=5)
 
         if total_boxes % 3 == 2:
             estabReviews.grid_rowconfigure(row_position + 1, weight=1)
 
-    def delete_box(box_frame):
+    def delete_box(box_frame, review_id):
+        delete_review_from_db(review_id)
         box_frame.destroy()
 
     def edit_review(box_frame, review):
         dialog = EditReviewDialog(estabReviews, review)
         estabReviews.wait_window(dialog.top)
         if dialog.result:
+            update_review_in_db(dialog.result)
             review.update(dialog.result)
             for widget in box_frame.winfo_children():
                 widget.destroy()
 
-            reviewer_name_label = tk.Label(box_frame, text=review["reviewer_name"])
+            reviewer_name_label = tk.Label(box_frame, text=review["account_id"])
             reviewer_name_label.pack(expand=True)
 
-            details_label = tk.Label(box_frame, text=f"ID: {review['review_id']}\nRating: {review['rating']}\nReview: {review['review_text']}\nEstablishment: {review['establishment']}")
+            details_label = tk.Label(
+                box_frame,
+                text=f"ID: {review['review_id']}\nRating: {review['rating']}\nReview: {review['review_text']}\nEstablishment: {review['establishment_id']}",
+            )
             details_label.pack(expand=True)
 
-            edit_button = ttk.Button(box_frame, text="Edit", command=lambda: edit_review(box_frame, review))
+            edit_button = ttk.Button(
+                box_frame, text="Edit", command=lambda: edit_review(box_frame, review)
+            )
             edit_button.pack(side="left", padx=5)
 
-            delete_box_button = ttk.Button(box_frame, text="Delete", command=lambda: delete_box(box_frame))
+            delete_box_button = ttk.Button(
+                box_frame,
+                text="Delete",
+                command=lambda: delete_box(box_frame, review["review_id"]),
+            )
             delete_box_button.pack(side="left", padx=5)
 
     def go_back():
@@ -168,31 +286,52 @@ def establishmentReviews(parent):
 
     estabReviews.configure(bg="#D3D3D3")
 
-    label1 = tk.Label(estabReviews, text="Food Establishment Reviews", font=('Arial', 20, 'bold'), bg="white", fg="#FFBA00", anchor="w")
+    label1 = tk.Label(
+        estabReviews,
+        text="Food Establishment Reviews",
+        font=("Arial", 20, "bold"),
+        bg="white",
+        fg="#FFBA00",
+        anchor="w",
+    )
     label1.grid(row=0, column=0, columnspan=3, sticky="new")
 
     estabReviews.columnconfigure(0, weight=1)
     estabReviews.columnconfigure(1, weight=1)
-    estabReviews.rowconfigure(0, weight=1)
+    estabReviews.columnconfigure(2, weight=1)
 
-    for i in range(3):
-        estabReviews.columnconfigure(i, weight=1)
-        estabReviews.rowconfigure(i + 1, weight=1)
+    backButton = tk.Button(
+        estabReviews,
+        text="Back",
+        font=("Arial", 12, "bold"),
+        bg="white",
+        fg="#FFBA00",
+        command=go_back,
+    )
+    backButton.grid(row=5, column=1, pady=20)
 
-    for row in range(1):
-        for col in range(3):
-            box_index = row * 3 + col
-            if box_index < len(reviews):
-                review = reviews[box_index]
-                create_new_box(review)
+    addButton = tk.Button(
+        estabReviews,
+        text="Add Review",
+        font=("Arial", 12, "bold"),
+        bg="white",
+        fg="#FFBA00",
+        command=add_review,
+    )
+    addButton.grid(row=5, column=2, pady=20)
 
-    add_button = ttk.Button(estabReviews, text="Add", command=add_review)
-    add_button.grid(row=0, column=1, pady=(20, 10))
+    viewItemsButton = tk.Button(
+        estabReviews,
+        text="Food Items",
+        font=("Arial", 12, "bold"),
+        bg="white",
+        fg="#FFBA00",
+        command=view_food_items,
+    )
+    viewItemsButton.grid(row=5, column=0, pady=20)
 
-    view_food_items_button = ttk.Button(estabReviews, text="View Food Items", command=view_food_items)
-    view_food_items_button.grid(row=0, column=2, pady=(20, 10))
-
-    back_button = ttk.Button(estabReviews, text="Back", command=go_back)
-    back_button.grid(row=0, column=0, pady=(20, 10))
+    reviews = fetch_reviews(establishment_id)
+    for review in reviews:
+        create_new_box(review)
 
     estabReviews.mainloop()
