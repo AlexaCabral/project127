@@ -132,7 +132,7 @@ class FoodItemWindow:
         scroll_x1 = ttk.Scrollbar(data_frame, orient=HORIZONTAL)
         scroll_y1 = ttk.Scrollbar(data_frame, orient=VERTICAL)
         
-        self.Fooditem_Table = ttk.Treeview(data_frame, column=("item_id", "price", "description", "name", "establishment_id"), xscrollcommand=scroll_x1.set, yscrollcommand=scroll_y1.set)
+        self.Fooditem_Table = ttk.Treeview(data_frame, column=("item_id", "price", "description", "name", "establishment_id", "food_type"), xscrollcommand=scroll_x1.set, yscrollcommand=scroll_y1.set)
         
         scroll_x1.pack(side=BOTTOM, fill="x")
         scroll_y1.pack(side=RIGHT, fill="y")
@@ -146,6 +146,7 @@ class FoodItemWindow:
         self.Fooditem_Table.heading("description", text="Description")
         self.Fooditem_Table.heading("name", text="Name")
         self.Fooditem_Table.heading("establishment_id", text="Establishment ID")
+        self.Fooditem_Table.heading("food_type", text="Food Type")
         
         self.Fooditem_Table["show"] = "headings"
         
@@ -155,6 +156,7 @@ class FoodItemWindow:
         self.Fooditem_Table.column("description", width=100)
         self.Fooditem_Table.column("name", width=100)
         self.Fooditem_Table.column("establishment_id", width=100)
+        self.Fooditem_Table.column("food_type", width=100)
 
         self.Fooditem_Table.pack(fill=BOTH, expand=1)
         self.fetch_data_fooditem()
@@ -169,7 +171,7 @@ class FoodItemWindow:
                 
             print("Connected to database...")
                 
-            mycursor.execute("SELECT * FROM food_item")
+            mycursor.execute("SELECT * FROM food_item NATURAL JOIN food_item_food_type")
             rows = mycursor.fetchall()
             print("Query")
                 
@@ -281,7 +283,7 @@ class FoodItemWindow:
                 
             print("Connected to database...")
             
-            query1 = "SELECT * FROM food_item WHERE "
+            query1 = "SELECT * FROM food_item NATURAL JOIN food_item_food_type WHERE "
             subquery = "(SELECT item_id FROM food_item_food_type WHERE food_type LIKE '%"+str(self.var_search_text_food_type.get())+"%') "
             
             # no id
