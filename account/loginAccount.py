@@ -110,42 +110,42 @@ canvas.create_image(0, 0, anchor=tk.NW, image=bg_image)
 
 # log in components
 # background
-canvas.create_rectangle(350, 25, 750, 625, fill='white', outline="#0C3B2E")
+canvas.create_rectangle(350, 25, 750, 625, fill='white', outline="white")
 
 # header
-label = tk.Label(canvas, text="LOGIN", font=('Courier', 30, 'bold'), bg="white", fg="#FFBA00")
-label.place(x=490, y=40)
+label = tk.Label(canvas, text="LOGIN", font=('Helvetica', 20, 'bold'), bg="white", fg="#B46617")
+label.place(x=510, y=40)
 
 # enter email
-emailEntry = tk.Entry(canvas, width=25, font=('Courier', 18, 'bold'), bd=0, fg="#656565")
+emailEntry = tk.Entry(canvas, width=25, font=('Helvetica Neue Light', 10), bd=0, fg="#656565")
 emailEntry.insert(0, "Email")
 emailEntry.bind("<FocusIn>", email_enter)
 emailEntry.bind("<FocusOut>", email_leave)
-tk.Frame(root, width=350, height=2, bg="#656565").place(x=380, y=215)
+tk.Frame(root, width=350, height=1, bg="#656565").place(x=380, y=215)
 emailEntry.place(x=380, y=190)
 
 # enter password
-passwordEntry = tk.Entry(canvas, width=20, font=('Courier', 18, 'bold'), bd=0, fg="#656565")
+passwordEntry = tk.Entry(canvas, width=20, font=('Helvetica Neue Light', 10), bd=0, fg="#656565")
 passwordEntry.insert(0, "Password")
 passwordEntry.bind("<FocusIn>", password_enter)
 passwordEntry.bind("<FocusOut>", password_leave)
-tk.Frame(root, width=350, height=2, bg="#656565").place(x=380, y=255)
+tk.Frame(root, width=350, height=1, bg="#656565").place(x=380, y=255)
 passwordEntry.place(x=380, y=230)
 
 # show/hide button for password
-pwBtn = tk.Button(canvas, text="Show", font=('Courier', 12, 'bold'), bd=0, bg="#FFFFFF", activebackground="#FFFFFF", fg="#6D9773", activeforeground="#FF5050", cursor="hand2", command=show)
+pwBtn = tk.Button(canvas, text="Show", font=('Helvetica', 10), bd=0, bg="#FFFFFF", activebackground="#FFFFFF", fg="#6D9773", activeforeground="#FF5050", cursor="hand2", command=show)
 pwBtn.place(x=680, y=230)
 
 # log in button
-loginBtn = tk.Button(canvas, text="Log In", font=('Courier', 16, 'bold'), bd=0, bg="#FFBA00", activebackground="#FFA500", fg="#725B32", activeforeground="white", cursor="hand2", width=20, command=login)
-loginBtn.place(x=425, y=330)
+loginBtn = tk.Button(canvas, text="Log In", font=('Helvetica', 12, 'bold'), bd=0, bg="#FFBA00", activebackground="#FFA500", fg="#725B32", activeforeground="white", cursor="hand2", width=20, command=login)
+loginBtn.place(x=445, y=330)
 
 # create account
-signupLabel = tk.Label(canvas, text="Don't have an account?", font=('Arial', 12), bg="white", fg="#725B32")
-signupLabel.place(x=396, y=590)
+signupLabel = tk.Label(canvas, text="Don't have an account?", font=('Arial', 9), bg="white", fg="#725B32")
+signupLabel.place(x=420, y=590)
 
 # create account button
-createBtn = tk.Button(canvas, text="Create an account.", font=('Arial', 11, 'bold'), bd=0, bg="#FFFFFF", activebackground="#FFFFFF", fg="#FFA500", activeforeground="#725B32", cursor="hand2", width=15, command=gotoSignUp)
-createBtn.place(x=560, y=588)
+createBtn = tk.Button(canvas, text="Create an account.", font=('Arial', 9, 'bold'), bd=0, bg="#FFFFFF", activebackground="#FFFFFF", fg="#FFA500", activeforeground="#725B32", cursor="hand2", width=15, command=gotoSignUp)
+createBtn.place(x=560, y=590)
 
 root.mainloop()
