@@ -4,7 +4,7 @@ import mysql.connector
 
 
 def owner_food_item(establishment_id):
-    def fetch_food_items(establishment_id):
+    def fetch_food_items(establishment_id, name):
         try:
             database = mysql.connector.connect(
                 host="localhost",
@@ -18,8 +18,8 @@ def owner_food_item(establishment_id):
             messagebox.showerror("Connection", f"Failed: {err}")
             return []
 
-        query = "SELECT * FROM food_item WHERE establishment_id = %s"
-        database_cursor.execute(query, (establishment_id,))
+        query = f"SELECT * FROM food_item WHERE establishment_id = {establishment_id} AND name LIKE '%{name}%'"
+        database_cursor.execute(query)
 
         results = database_cursor.fetchall()
 
@@ -64,8 +64,7 @@ def owner_food_item(establishment_id):
         database.close()
 
         # Refresh the food items list
-        items = fetch_food_items(establishment_id)
-        display_items(items)
+        on_search()
 
     def update_food_item(item_id, price, description, name):
         try:
@@ -90,8 +89,7 @@ def owner_food_item(establishment_id):
         database.close()
 
         # Refresh the food items list
-        items = fetch_food_items(establishment_id)
-        display_items(items)
+        on_search()
 
     def delete_food_item(item_id):
         try:
@@ -119,8 +117,7 @@ def owner_food_item(establishment_id):
         database.close()
 
         # Refresh the food items list
-        items = fetch_food_items(establishment_id)
-        display_items(items)
+        on_search()
 
     def open_add_item_window():
         def submit_item():
@@ -186,8 +183,7 @@ def owner_food_item(establishment_id):
         database.close()
 
         # Refresh the food items list
-        items = fetch_food_items(establishment_id)
-        display_items(items)
+        on_search()
 
     def display_items(items):
         for widget in items_frame.winfo_children():
@@ -308,17 +304,37 @@ def owner_food_item(establishment_id):
             messagebox.showerror("Connection", f"Failed: {err}")
             return []
 
+    def on_search():
+        name = search_entry.get()
+        items = fetch_food_items(establishment_id, name)
+        display_items(items)
+
     # Root window setup
     root = tk.Toplevel()
     root.title("Food Items")
     root.geometry("1100x650")
 
+    # Search bar
+    search_frame = tk.Frame(root, bg="#D3D3D3")
+    search_frame.pack(side=tk.TOP, fill=tk.X, padx=10, pady=10)
+
+    tk.Label(
+        search_frame, text="Search Establishments:", font=("Arial", 14), bg="#D3D3D3"
+    ).pack(side=tk.LEFT, padx=10)
+
+    search_entry = tk.Entry(search_frame, font=("Arial", 14), width=30)
+    search_entry.pack(side=tk.LEFT, padx=10)
+
+    search_btn = tk.Button(
+        search_frame, text="Search", font=("Arial", 14), command=on_search
+    )
+    search_btn.pack(side=tk.LEFT, padx=10)
+
     # Items frame
     items_frame = tk.Frame(root)
     items_frame.pack(pady=20, fill=tk.BOTH, expand=True)
 
-    items = fetch_food_items(establishment_id)
-    display_items(items)
+    on_search()
 
     # Add Food Item button
     add_item_btn = tk.Button(root, text="Add Food Item", command=open_add_item_window)

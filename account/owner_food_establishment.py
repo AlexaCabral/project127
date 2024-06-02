@@ -6,7 +6,7 @@ import estabReviews
 from owner_food_item import owner_food_item
 
 
-def food_establishment(account_id):
+def owner_food_establishment(account_id):
     # Function to establish a database connection
     def connect_to_db():
         try:
@@ -349,4 +349,4 @@ def food_establishment(account_id):
     foodestabWindow.mainloop()
 
 
-food_establishment(1)
+owner_food_establishment(1)
