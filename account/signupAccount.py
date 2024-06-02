@@ -99,7 +99,7 @@ def signup(parent):
                         return
                     else:  
                         try:
-                            mydb = mysql.connector.connect(host='localhost', user='root', password='server', database='project')
+                            mydb = mysql.connector.connect(host='localhost', user='root', password='jdrub', database='project')
                             mycursor = mydb.cursor()
                             print("Connected to database...")
                         except:
