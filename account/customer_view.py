@@ -35,39 +35,115 @@ def customer_food_establishment(account_id):
         return results
 
     def create_new_box(establishment):
-        new_box_frame = ttk.Frame(foodestabWindow, borderwidth=1, relief="solid")
-        total_boxes = len(foodestabWindow.grid_slaves()) - 2
-        row_position = total_boxes // 3 + 2
+        new_box_frame = tk.Frame(
+            boxes_frame,
+            bg="#FFFFFF",
+            borderwidth=1,
+            relief="solid",
+            width=300,
+            height=300,
+        )
+        new_box_frame.grid_propagate(False)
+        new_box_frame.columnconfigure(0, weight=1)
+        total_boxes = len(boxes_frame.grid_slaves())
+        row_position = total_boxes // 3
         column_position = total_boxes % 3
 
         new_box_frame.grid(
             row=row_position, column=column_position, padx=20, pady=30, sticky="nsew"
         )
-
-        item_name_label = tk.Label(new_box_frame, text=establishment["name"])
-        item_name_label.pack(expand=True)
-
-        details_label = tk.Label(
+        item_name_label = tk.Label(
             new_box_frame,
-            text=f"ID: {establishment['estab_id']}\nLocation: {establishment['location']}\nDescription: {establishment['description']}",
-            width=40,
+            bg="#FFFFFF",
+            text=establishment["name"],
+            font=("Helvetica", 12, "bold"),
+            fg="#FFBA00",
         )
-        details_label.pack(expand=True)
+        item_name_label.grid(row=0, column=0, pady=5, sticky="ew")
 
-        reviews_button = ttk.Button(
-            new_box_frame, text="Check Food Reviews", command=lambda estab_id=establishment['estab_id']: check_reviews(estab_id)
+        container = tk.Frame(new_box_frame, bg="#FFFFFF", bd=0)
+        container.columnconfigure(0, weight=1)
+        container.columnconfigure(1, weight=1)
+        container.grid(row=1, column=0, padx=5, pady=5, sticky="ew")
+
+        location_label = tk.Label(
+            container,
+            bg="#FFFFFF",
+            text="Location",
+            font=("Helvetica", 10, "bold"),
+            fg="#B46617",
         )
-        reviews_button.pack(side="left", padx=5)
+        location_label.grid(row=0, column=0, sticky="w", padx=5, pady=5)
+        location_value_label = tk.Label(
+            container,
+            bg="#FFFFFF",
+            text=establishment["location"],
+            font=("Helvetica Neue Light", 10),
+            fg="#B46617",
+        )
+        location_value_label.grid(row=0, column=1, sticky="e", padx=5, pady=5)
+
+        avg_rating_label = tk.Label(
+            container,
+            bg="#FFFFFF",
+            text="Average Rating",
+            font=("Helvetica", 10, "bold"),
+            fg="#B46617",
+        )
+        avg_rating_label.grid(row=1, column=0, sticky="w", padx=5, pady=5)
+        avg_rating_value_label = tk.Label(
+            container,
+            bg="#FFFFFF",
+            text=establishment["average_rating"],
+            font=("Helvetica Neue Light", 10),
+            fg="#B46617",
+        )
+        avg_rating_value_label.grid(row=1, column=1, sticky="e", padx=5, pady=5)
+
+        description_label = tk.Label(
+            new_box_frame,
+            bg="#FFFFFF",
+            text="Description",
+            font=("Helvetica", 10, "bold"),
+            fg="#B46617",
+        )
+        description_label.grid(row=2, column=0, sticky="ew", padx=5, pady=5)
+
+        # Creating a Text widget for the description
+        description_text = tk.Text(
+            new_box_frame,
+            bg="#FFFFFF",
+            font=("Helvetica Neue Light", 10),
+            wrap="word",
+            height=5,
+            bd=0,
+            fg="#B46617",
+        )
+        description_text.insert(tk.END, establishment["description"])
+        description_text.configure(state="disabled")
+        description_text.grid(row=3, column=0, sticky="ew", padx=10, pady=5)
+
+        reviews_button = tk.Button(
+            new_box_frame,
+            text="Check Reviews",
+            font=("Helvetica", 10, "bold"),
+            command=lambda estab_id=establishment["estab_id"]: check_reviews(estab_id),
+            bg="#B46617",
+            fg="white",
+            bd=0,
+        )
+        reviews_button.grid(row=4, column=0, columnspan=1, pady=5, sticky="s")
 
     def check_reviews(estab_id):
         print("Check Food Reviews button clicked")
-        foodestabWindow.withdraw()
-        Customer_EstabReviews.establishmentReviews(foodestabWindow, estab_id, account_id)
+        customer_food_establishment_window.withdraw()
+        Customer_EstabReviews.establishmentReviews(
+            customer_food_establishment_window, estab_id, account_id
+        )
 
     def clear_boxes():
-        for widget in foodestabWindow.grid_slaves():
-            if int(widget.grid_info()["row"]) > 1:
-                widget.destroy()
+        for widget in boxes_frame.grid_slaves():
+            widget.destroy()
 
     def load_initial_data(name=""):
         clear_boxes()
@@ -87,44 +163,68 @@ def customer_food_establishment(account_id):
         name = search_entry.get()
         load_initial_data(name)
 
-    foodestabWindow = tk.Tk()
-    foodestabWindow.geometry("1100x650")
-    foodestabWindow.title("Food Establishment Customer Account")
-    foodestabWindow.resizable(False, False)
-    foodestabWindow.configure(bg="#D3D3D3")
+    customer_food_establishment_window = tk.Tk()
+    customer_food_establishment_window.geometry("1100x650")
+    customer_food_establishment_window.title("Food Establishment")
+    customer_food_establishment_window.resizable(False, False)
+    customer_food_establishment_window.configure(bg="#FFFFFF")
 
     label1 = tk.Label(
-        foodestabWindow,
-        text="Food Establishment Customer Account",
-        font=("Arial", 20, "bold"),
+        customer_food_establishment_window,
+        text="FOOD ESTABLISHMENT",
+        font=("Helvetica", 20, "bold"),
         bg="white",
         fg="#FFBA00",
-        anchor="nw",
+        anchor="n",
     )
-    label1.grid(row=0, column=0, columnspan=3, sticky="new")
+    label1.grid(row=0, column=0, columnspan=3, sticky="new", pady=10)
 
     # Search bar
-    search_frame = tk.Frame(foodestabWindow, bg="#D3D3D3")
-    search_frame.grid(row=1, column=0, columnspan=3, pady=10, padx=20, sticky="ew")
+    search_frame = tk.Frame(customer_food_establishment_window, bg="#FFFFFF")
+    search_frame.grid(row=1, column=1, columnspan=2, pady=10, padx=20, sticky="ew")
 
-    tk.Label(
-        search_frame, text="Search Establishments:", font=("Arial", 14), bg="#D3D3D3"
-    ).pack(side=tk.LEFT, padx=10)
-
-    search_entry = tk.Entry(search_frame, font=("Arial", 14), width=30)
+    search_entry = tk.Entry(search_frame, font=("Helvetica", 12), width=30)
     search_entry.pack(side=tk.LEFT, padx=10)
 
     search_btn = tk.Button(
-        search_frame, text="Search", font=("Arial", 14), command=on_search
+        search_frame,
+        text="Search",
+        font=("Helvetica", 12, "bold"),
+        command=on_search,
+        bg="#B46617",
+        fg="white",
+        bd=0,
     )
     search_btn.pack(side=tk.LEFT, padx=10)
 
-    foodestabWindow.columnconfigure(0, weight=1)
-    foodestabWindow.columnconfigure(1, weight=1)
-    foodestabWindow.columnconfigure(2, weight=1)
+    # Scrollable frame setup
+    canvas = tk.Canvas(customer_food_establishment_window, bg="#FFFFFF")
+    scroll_y = tk.Scrollbar(
+        customer_food_establishment_window, orient="vertical", command=canvas.yview
+    )
+    scroll_frame = tk.Frame(canvas, bg="#FFFFFF")
+
+    scroll_frame.bind(
+        "<Configure>", lambda e: canvas.configure(scrollregion=canvas.bbox("all"))
+    )
+
+    canvas.create_window((0, 0), window=scroll_frame, anchor="nw")
+    canvas.configure(yscrollcommand=scroll_y.set)
+
+    # Grid layout for the scrollable frame
+    scroll_y.grid(row=2, column=3, sticky="ns")
+    canvas.grid(row=2, column=0, columnspan=3, sticky="nsew")
+
+    boxes_frame = tk.Frame(scroll_frame, bg="#FFFFFF")
+    boxes_frame.grid(row=0, column=0, sticky="nsew")
+
+    customer_food_establishment_window.columnconfigure(0, weight=1)
+    customer_food_establishment_window.columnconfigure(1, weight=1)
+    customer_food_establishment_window.columnconfigure(2, weight=1)
+    customer_food_establishment_window.rowconfigure(2, weight=1)
 
     load_initial_data()
-    foodestabWindow.mainloop()
+    customer_food_establishment_window.mainloop()
 
 
 customer_food_establishment(1)
