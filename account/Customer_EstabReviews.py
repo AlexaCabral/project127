@@ -261,7 +261,7 @@ def establishmentReviews(parent, establishment_id, account_id):
     def view_food_items():
         print("Food Items button clicked")
         estabReviews.withdraw()
-        Customer_FoodItems.FoodReviews(estabReviews)
+        Customer_FoodItems.FoodReviews(estabReviews, account_id, establishment_id)
 
     estabReviews = tk.Tk()
     estabReviews.geometry("1100x650")
