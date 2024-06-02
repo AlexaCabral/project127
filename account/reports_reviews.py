@@ -381,11 +381,13 @@ class ReviewWindow:
             elif(self.var_estab_id_right.get() != "" and self.var_food_id.get() == ""):
                 if(self.var_filter_dropdown.get() == ""):
                     print("No filter, estab id")
-                    mycursor.execute(query1+" WHERE establishment_id ="+str(self.var_estab_id_right.get()))
+                    mycursor.execute(query1+" WHERE establishment_id = "+str(self.var_estab_id_right.get()))
                     rows = mycursor.fetchall()
                 else:
                     print("Filter, estab id")
-                    mycursor.execute(query1+" WHERE MONTHNAME(datetime) LIKE '"+str(self.var_filter_dropdown.get())+"' and establishment_id ="+str(self.var_estab_id_right.get()))
+                    mycursor.execute(query1+" WHERE MONTHNAME(datetime) LIKE '"+str(self.var_filter_dropdown.get())+"' AND establishment_id ="+str(self.var_estab_id_right.get()))
+                    rows = mycursor.fetchall()
+                    
             elif(self.var_estab_id_right.get() == "" and self.var_food_id.get() != ""):
                 if(self.var_filter_dropdown.get() == ""):
                     print("No filter, food id")
@@ -394,6 +396,7 @@ class ReviewWindow:
                 else:
                     print("Filter, food id")
                     mycursor.execute(query1+" WHERE MONTHNAME(datetime) LIKE '"+str(self.var_filter_dropdown.get())+"' and item_id ="+str(self.var_food_id.get()))
+                    rows = mycursor.fetchall()
             else:
                 if(self.var_filter_dropdown.get() == ""):
                     print("No filter, food id, estab id")
@@ -402,6 +405,8 @@ class ReviewWindow:
                 else:
                     print("Filter, food id, estab id")
                     mycursor.execute(query1+" WHERE MONTHNAME(datetime) LIKE '"+str(self.var_filter_dropdown.get())+"' and item_id ="+str(self.var_food_id.get())+" AND establishment_id ="+str(self.var_estab_id_right.get()))
+                    rows = mycursor.fetchall()
+            
             if len(rows) != 0:
                 self.Review_Table.delete(*self.Review_Table.get_children())
                 for i in rows:
