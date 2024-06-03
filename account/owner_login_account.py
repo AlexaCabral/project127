@@ -6,6 +6,7 @@ from PIL import Image, ImageTk
 import requests
 from io import BytesIO
 import owner_signup_account
+from reports import MainSystem
 
 
 def new_window(parent):
@@ -50,30 +51,38 @@ def new_window(parent):
             password == "" or password == "Password"
         ):
             messagebox.showerror("Entry error", "Invalid Email or Password.")
+            return
 
-        else:
-            try:
-                mydb = mysql.connector.connect(
-                    host="localhost", user="root", password="server", database="project"
-                )
-                mycursor = mydb.cursor()
-                print("Connected to database...")
-            except:
-                messagebox.showerror("Connection", "Failed")
-                return
-
-            mycursor.execute("USE project")
-            mycursor.execute(
-                "SELECT * FROM owner WHERE email=%s and password=%s", (email, password)
+        try:
+            mydb = mysql.connector.connect(
+                host="localhost",
+                user="root",
+                password="chancekababy2021",
+                database="project",
             )
+            mycursor = mydb.cursor()
+            print("Connected to database...")
+        except:
+            messagebox.showerror("Connection", "Failed")
+            return
 
-            myresult = mycursor.fetchone()
-            print(myresult)
+        mycursor.execute("USE project")
+        mycursor.execute(
+            "SELECT * FROM owner WHERE email=%s and password=%s", (email, password)
+        )
 
-            if myresult == None:
-                messagebox.showerror("Invalid", "Invalid Email or Password.")
-            else:
-                messagebox.showinfo("Log in", "Welcome.")
+        myresult = mycursor.fetchone()
+        print(myresult)
+
+        if myresult == None:
+            messagebox.showerror("Invalid", "Invalid Email or Password.")
+            return
+
+        messagebox.showinfo("Log in", "Welcome.")
+        new_window.withdraw()
+        new_root = tk.Tk()
+        MainSystem(new_root, user_type="customer", account_id=myresult[0])
+        new_root.mainloop()
 
     # owner log in window
     new_window = tk.Toplevel(parent)

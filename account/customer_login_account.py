@@ -102,12 +102,13 @@ def login():
 
         if myresult == None:
             messagebox.showerror("Invalid", "Invalid Email or Password.")
-        else:
-            messagebox.showinfo("Log in", "Welcome.")
-            root.withdraw()
-            new_root = tk.Tk()
-            MainSystem(new_root, user_type="customer", account_id=myresult[0])
-            new_root.mainloop()
+            return
+        
+        messagebox.showinfo("Log in", "Welcome.")
+        root.withdraw()
+        new_root = tk.Tk()
+        MainSystem(new_root, user_type="customer", account_id=myresult[0])
+        new_root.mainloop()
 
 
 # root window

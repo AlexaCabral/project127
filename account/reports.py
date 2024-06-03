@@ -3,6 +3,7 @@ from reports_establishment import EstablishmentWindow
 from reports_food_item import FoodItemWindow
 from reports_reviews import ReviewWindow
 from customer_food_establishment import customer_food_establishment
+from owner_food_establishment import owner_food_establishment
 
 
 class MainSystem:
@@ -110,6 +111,7 @@ class MainSystem:
                 fg="#725B32",
                 activeforeground="white",
                 cursor="hand2",
+                command=lambda: owner_food_establishment(account_id)
             )
             owner_food_establishment_button.pack(side="right", padx=10, pady=10)
 
