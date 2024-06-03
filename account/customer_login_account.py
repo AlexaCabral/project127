@@ -107,7 +107,7 @@ def login():
         messagebox.showinfo("Log in", "Welcome.")
         root.withdraw()
         new_root = tk.Tk()
-        MainSystem(new_root, user_type="customer", account_id=myresult[0])
+        MainSystem(new_root, user_type="customer", account_id=myresult[0], parent=root)
         new_root.mainloop()
 
 

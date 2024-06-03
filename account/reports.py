@@ -7,12 +7,13 @@ from owner_food_establishment import owner_food_establishment
 
 
 class MainSystem:
-    def __init__(self, root, user_type, account_id):
+    def __init__(self, root, user_type, account_id, parent):
         self.root = root
         self.root.title("System")
         self.root.geometry("1100x650+0+0")
         self.root.resizable(False, False)
         self.root.configure(bg="white")
+        self.parent = parent
 
         # frame
         navbar = Frame(self.root, bg="#FFBA00", height=50)
@@ -78,6 +79,7 @@ class MainSystem:
             fg="#725B32",
             activeforeground="white",
             cursor="hand2",
+            command=self.go_back
         )
 
         # button placements
@@ -137,6 +139,10 @@ class MainSystem:
     def review_detail(self):
         self.new_window = Toplevel(self.root)
         self.app = ReviewWindow(self.new_window)
+    
+    def go_back(self):
+        self.parent.deiconify()
+        self.root.withdraw()
 
 
 # main window
