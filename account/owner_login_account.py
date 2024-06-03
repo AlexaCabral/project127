@@ -7,6 +7,7 @@ import requests
 from io import BytesIO
 import owner_signup_account
 from reports import MainSystem
+from owner_food_establishment import owner_food_establishment
 
 
 def new_window(parent):
@@ -74,15 +75,16 @@ def new_window(parent):
         myresult = mycursor.fetchone()
         print(myresult)
 
+        mycursor.close()
+        mydb.close()
+
         if myresult == None:
             messagebox.showerror("Invalid", "Invalid Email or Password.")
             return
 
         messagebox.showinfo("Log in", "Welcome.")
         new_window.withdraw()
-        new_root = tk.Tk()
-        MainSystem(new_root, user_type="owner", account_id=myresult[0], parent=new_window)
-        new_root.mainloop()
+        owner_food_establishment(myresult[0])
 
     # owner log in window
     new_window = tk.Toplevel(parent)

@@ -7,13 +7,12 @@ from owner_food_establishment import owner_food_establishment
 
 
 class MainSystem:
-    def __init__(self, root, user_type, account_id, parent):
+    def __init__(self, root):
         self.root = root
         self.root.title("System")
         self.root.geometry("1100x650+0+0")
         self.root.resizable(False, False)
         self.root.configure(bg="white")
-        self.parent = parent
 
         # frame
         navbar = Frame(self.root, bg="#FFBA00", height=50)
@@ -88,35 +87,6 @@ class MainSystem:
         review_btn.pack(side="right", padx=10, pady=10)
         establishment_btn.pack(side="right", padx=10, pady=10)
 
-        if user_type == "customer":
-            customer_food_establishment_button = Button(
-                navbar,
-                text="Manage reviews",
-                font=("Courier", 13, "bold"),
-                bd=0,
-                bg="#FFBA00",
-                activebackground="#FFBA00",
-                fg="#725B32",
-                activeforeground="white",
-                cursor="hand2",
-                command=lambda: customer_food_establishment(account_id)
-            )
-            customer_food_establishment_button.pack(side="right", padx=10, pady=10)
-        else:
-            owner_food_establishment_button = Button(
-                navbar,
-                text="Manage establishments",
-                font=("Courier", 13, "bold"),
-                bd=0,
-                bg="#FFBA00",
-                activebackground="#FFBA00",
-                fg="#725B32",
-                activeforeground="white",
-                cursor="hand2",
-                command=lambda: owner_food_establishment(account_id)
-            )
-            owner_food_establishment_button.pack(side="right", padx=10, pady=10)
-
         # Big text
         no_activity = Label(
             self.root,
@@ -141,12 +111,11 @@ class MainSystem:
         self.app = ReviewWindow(self.new_window)
     
     def go_back(self):
-        self.parent.deiconify()
         self.root.withdraw()
 
 
 # main window
 if __name__ == "__main__":
     root = Tk()
-    obj = MainSystem(root, 1, "customer", root)
+    obj = MainSystem(root)
     root.mainloop()

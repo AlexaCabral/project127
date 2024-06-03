@@ -21,7 +21,7 @@ import requests
 from io import BytesIO
 import customer_signup_account
 import owner_login_account
-import customer_food_establishment
+from customer_food_establishment import customer_food_establishment
 from reports import MainSystem
 
 
@@ -100,18 +100,16 @@ def login():
         myresult = mycursor.fetchone()
         print(myresult)
 
+        mycursor.close()
+        mydb.close()
+
         if myresult == None:
             messagebox.showerror("Invalid", "Invalid Email or Password.")
             return
-
-        mycursor.close()
-        mydb.close()
         
         messagebox.showinfo("Log in", "Welcome.")
         root.withdraw()
-        new_root = tk.Tk()
-        MainSystem(new_root, user_type="customer", account_id=myresult[0], parent=root)
-        new_root.mainloop()
+        customer_food_establishment(mycursor[0])
 
 
 # root window
