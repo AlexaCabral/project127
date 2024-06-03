@@ -64,7 +64,7 @@ def owner_food_establishment(account_id):
         def __init__(self, parent):
             self.top = tk.Toplevel(parent)
             self.top.title("Add New Item")
-            self.top.geometry("300x200")
+            self.top.geometry("300x250")
             self.result = None
 
             tk.Label(
@@ -95,10 +95,10 @@ def owner_food_establishment(account_id):
                 foreground="#B46617",
                 font=("Helvetica", 12, "bold"),
             ).pack()
-            self.description_entry = ttk.Entry(
-                self.top, foreground="black", font=("Helvetica", 11)
+            self.description_text = tk.Text(
+                self.top, foreground="black", font=("Helvetica", 11), height=5, wrap="word"
             )
-            self.description_entry.pack()
+            self.description_text.pack()
 
             tk.Button(
                 self.top,
@@ -115,7 +115,7 @@ def owner_food_establishment(account_id):
             self.result = {
                 "name": self.estab_name_entry.get(),
                 "location": self.location_entry.get(),
-                "description": self.description_entry.get(),
+                "description": self.description_text.get("1.0", tk.END).strip(),
             }
             self.top.destroy()
 
@@ -123,7 +123,7 @@ def owner_food_establishment(account_id):
         def __init__(self, parent, item):
             self.top = tk.Toplevel(parent)
             self.top.title("Edit Item")
-            self.top.geometry("300x200")
+            self.top.geometry("300x250")
             self.result = None
 
             tk.Label(
@@ -156,11 +156,11 @@ def owner_food_establishment(account_id):
                 foreground="#B46617",
                 font=("Helvetica", 12, "bold"),
             ).pack()
-            self.description_entry = ttk.Entry(
-                self.top, foreground="black", font=("Helvetica", 11)
+            self.description_text = tk.Text(
+                self.top, foreground="black", font=("Helvetica", 11), height=5, wrap="word"
             )
-            self.description_entry.pack()
-            self.description_entry.insert(0, item["description"])
+            self.description_text.pack()
+            self.description_text.insert(tk.END, item["description"])
 
             button = tk.Button(
                 self.top,
@@ -176,9 +176,10 @@ def owner_food_establishment(account_id):
             self.result = {
                 "name": self.estab_name_entry.get(),
                 "location": self.location_entry.get(),
-                "description": self.description_entry.get(),
+                "description": self.description_text.get("1.0", tk.END).strip(),
             }
             self.top.destroy()
+
 
     def create_new_box(establishment):
         new_box_frame = tk.Frame(
@@ -271,11 +272,15 @@ def owner_food_establishment(account_id):
         edit_button = tk.Button(
             new_box_frame,
             text="Edit",
-            font=("Helvetica", 10),
+            font=("Helvetica", 10, "bold"),
             command=lambda: edit_item(new_box_frame, establishment),
-            bg="#B46617",
             fg="white",
+            bg="#B46617",
             bd=0,
+            activebackground="#FFA500",
+            activeforeground="white",
+            cursor="hand2",
+            width=7,
         )
         edit_button.grid(row=4, column=0, columnspan=1, pady=5, sticky="s")
 
