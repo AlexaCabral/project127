@@ -86,15 +86,15 @@ def signup(parent):
             messagebox.showerror("Entry error", "Invalid Email or Password.")
 
         else:
-            pvalid = 0
+            valid_password = 0
 
             if password == confirm_password:
                 for char in password:
                     if char.isdigit():
-                        pvalid = 1
+                        valid_password = 1
                         break
 
-                if pvalid == 0:
+                if valid_password == 0:
                     messagebox.showerror(
                         "Entry error", "Password must contain atleast one number [0-9]."
                     )

@@ -9,42 +9,42 @@ import owner_signup_account
 
 
 def new_window(parent):
-    def gotoSignUp():
-        newWindow.withdraw()
-        owner_signup_account.signup(newWindow)
+    def go_to_signup():
+        new_window.withdraw()
+        owner_signup_account.signup(new_window)
 
     def email_enter(event):
-        if emailEntry.get() == "Email":
-            emailEntry.delete(0, "end")
+        if email_entry.get() == "Email":
+            email_entry.delete(0, "end")
 
     def email_leave(event):
-        if emailEntry.get() == "":
-            emailEntry.insert(0, "Email")
+        if email_entry.get() == "":
+            email_entry.insert(0, "Email")
 
     def password_enter(event):
-        if passwordEntry.get() == "Password":
-            passwordEntry.delete(0, "end")
-        passwordEntry.config(show="*")
+        if password_entry.get() == "Password":
+            password_entry.delete(0, "end")
+        password_entry.config(show="*")
 
     def password_leave(event):
-        if passwordEntry.get() == "":
-            passwordEntry.insert(0, "Password")
-            passwordEntry.config(show="")
+        if password_entry.get() == "":
+            password_entry.insert(0, "Password")
+            password_entry.config(show="")
 
     def hide():
-        pwBtn.config(text="Show")
-        if passwordEntry.get() != "Password":
-            passwordEntry.config(show="*")
-        pwBtn.config(command=show)
+        password_button.config(text="Show")
+        if password_entry.get() != "Password":
+            password_entry.config(show="*")
+        password_button.config(command=show)
 
     def show():
-        pwBtn.config(text="Hide")
-        passwordEntry.config(show="")
-        pwBtn.config(command=hide)
+        password_button.config(text="Hide")
+        password_entry.config(show="")
+        password_button.config(command=hide)
 
     def login():
-        email = emailEntry.get()
-        password = passwordEntry.get()
+        email = email_entry.get()
+        password = password_entry.get()
 
         if (email == "" or email == "Email") or (
             password == "" or password == "Password"
@@ -76,10 +76,10 @@ def new_window(parent):
                 messagebox.showinfo("Log in", "Welcome.")
 
     # owner log in window
-    newWindow = tk.Toplevel(parent)
-    newWindow.geometry("1100x650")
-    newWindow.title("Log in")
-    newWindow.resizable(False, False)
+    new_window = tk.Toplevel(parent)
+    new_window.geometry("1100x650")
+    new_window.title("Log in")
+    new_window.resizable(False, False)
 
     # access url, not relative paths
     image_url = "https://images.pexels.com/photos/1640773/pexels-photo-1640773.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
@@ -88,15 +88,15 @@ def new_window(parent):
     response = requests.get(image_url)
     image_data = response.content
     image = Image.open(BytesIO(image_data))
-    bg_image = ImageTk.PhotoImage(image)
+    background_image = ImageTk.PhotoImage(image)
 
-    newWindow.bg_image = bg_image
+    new_window.bg_image = background_image
 
-    # canvas for newWindow
-    canvas = tk.Canvas(newWindow, width=1100, height=650)
+    # canvas for new_window
+    canvas = tk.Canvas(new_window, width=1100, height=650)
     canvas.pack(fill=tk.BOTH, expand=True)
 
-    canvas.create_image(0, 0, anchor=tk.NW, image=bg_image)
+    canvas.create_image(0, 0, anchor=tk.NW, image=background_image)
 
     # sign up components
     # background
@@ -107,33 +107,33 @@ def new_window(parent):
         canvas, text="LOGIN", font=("Courier", 30, "bold"), bg="white", fg="#6D9773"
     )
     label.place(x=490, y=40)
-    labelowner = tk.Label(
+    owner_label = tk.Label(
         canvas, text="OWNER", font=("Courier", 15, "bold"), bg="white", fg="#6D9773"
     )
-    labelowner.place(x=520, y=80)
+    owner_label.place(x=520, y=80)
 
     # enter email
-    emailEntry = tk.Entry(
+    email_entry = tk.Entry(
         canvas, width=25, font=("Courier", 18, "bold"), bd=0, fg="#656565"
     )
-    emailEntry.insert(0, "Email")
-    emailEntry.bind("<FocusIn>", email_enter)
-    emailEntry.bind("<FocusOut>", email_leave)
-    tk.Frame(newWindow, width=350, height=2, bg="#656565").place(x=380, y=215)
-    emailEntry.place(x=380, y=190)
+    email_entry.insert(0, "Email")
+    email_entry.bind("<FocusIn>", email_enter)
+    email_entry.bind("<FocusOut>", email_leave)
+    tk.Frame(new_window, width=350, height=2, bg="#656565").place(x=380, y=215)
+    email_entry.place(x=380, y=190)
 
     # enter password
-    passwordEntry = tk.Entry(
+    password_entry = tk.Entry(
         canvas, width=20, font=("Courier", 18, "bold"), bd=0, fg="#656565"
     )
-    passwordEntry.insert(0, "Password")
-    passwordEntry.bind("<FocusIn>", password_enter)
-    passwordEntry.bind("<FocusOut>", password_leave)
-    tk.Frame(newWindow, width=350, height=2, bg="#656565").place(x=380, y=255)
-    passwordEntry.place(x=380, y=230)
+    password_entry.insert(0, "Password")
+    password_entry.bind("<FocusIn>", password_enter)
+    password_entry.bind("<FocusOut>", password_leave)
+    tk.Frame(new_window, width=350, height=2, bg="#656565").place(x=380, y=255)
+    password_entry.place(x=380, y=230)
 
     # show/hide button for password
-    pwBtn = tk.Button(
+    password_button = tk.Button(
         canvas,
         text="Show",
         font=("Courier", 12, "bold"),
@@ -145,10 +145,10 @@ def new_window(parent):
         cursor="hand2",
         command=show,
     )
-    pwBtn.place(x=680, y=230)
+    password_button.place(x=680, y=230)
 
     # log in button
-    loginBtn = tk.Button(
+    login_button = tk.Button(
         canvas,
         text="Log In",
         font=("Courier", 16, "bold"),
@@ -161,16 +161,16 @@ def new_window(parent):
         width=20,
         command=login,
     )
-    loginBtn.place(x=425, y=330)
+    login_button.place(x=425, y=330)
 
     # log in as customer text
-    customerLabel = tk.Label(
+    customer_label = tk.Label(
         canvas, text="Or Log in as", font=("Arial", 10), bg="white", fg="#0C3B2E"
     )
-    customerLabel.place(x=492, y=372)
+    customer_label.place(x=492, y=372)
 
     # log in as customer button
-    customerBtn = tk.Button(
+    customer_button = tk.Button(
         canvas,
         text="Customer.",
         font=("Arial", 10, "bold"),
@@ -181,22 +181,22 @@ def new_window(parent):
         activeforeground="#0C3B2E",
         cursor="hand2",
         width=8,
-        command=lambda: gotoLogIn(newWindow, parent),
+        command=lambda: go_to_login(new_window, parent),
     )
-    customerBtn.place(x=566, y=371)
+    customer_button.place(x=566, y=371)
 
     # create account
-    signupLabel = tk.Label(
+    signup_label = tk.Label(
         canvas,
         text="Don't have an account?",
         font=("Arial", 10),
         bg="white",
         fg="#0C3B2E",
     )
-    signupLabel.place(x=420, y=590)
+    signup_label.place(x=420, y=590)
 
     # create button
-    createBtn = tk.Button(
+    create_button = tk.Button(
         canvas,
         text="Create an account.",
         font=("Arial", 10, "bold"),
@@ -207,11 +207,11 @@ def new_window(parent):
         activeforeground="#0C3B2E",
         cursor="hand2",
         width=15,
-        command=gotoSignUp,
+        command=go_to_signup,
     )
-    createBtn.place(x=560, y=588)
+    create_button.place(x=560, y=588)
 
 
-def gotoLogIn(newWindow, parent):
-    newWindow.destroy()
+def go_to_login(new_window, parent):
+    new_window.destroy()
     parent.deiconify()
