@@ -84,67 +84,67 @@ def signup(parent):
             or (confirm_password == "" or confirm_password == "Confirm Password")
         ):
             messagebox.showerror("Entry error", "Invalid Email or Password.")
+            return
 
-        else:
-            valid_password = 0
+        if password != confirm_password:
+            messagebox.showerror(
+                "Password mismatch", "Password and confirm password must match."
+            )
+            return
 
-            if password == confirm_password:
-                for char in password:
-                    if char.isdigit():
-                        valid_password = 1
-                        break
+        valid_password = 0
 
-                if valid_password == 0:
-                    messagebox.showerror(
-                        "Entry error", "Password must contain atleast one number [0-9]."
-                    )
+        for char in password:
+            if char.isdigit():
+                valid_password = 1
+                break
 
-                else:
-                    if not is_email_valid(email):
-                        messagebox.showerror(
-                            "Entry error", "Email must follow the format: __@__.__"
-                        )
-                        return
-                    else:
-                        try:
-                            mydb = mysql.connector.connect(
-                                host="localhost",
-                                user="root",
-                                password="chancekababy2021",
-                                database="project",
-                            )
-                            mycursor = mydb.cursor()
-                            print("Connected to database...")
-                        except:
-                            messagebox.showerror("Connection", "Failed")
-                            return
+        if valid_password == 0:
+            messagebox.showerror(
+                "Entry error", "Password must contain atleast one number [0-9]."
+            )
+            return
 
-                        mycursor.execute("USE project")
-                        print("project used...")
+        if not is_email_valid(email):
+            messagebox.showerror(
+                "Entry error", "Email must follow the format: __@__.__"
+            )
+            return
 
-                        mycursor.execute(
-                            "SELECT COUNT(*) FROM owner WHERE email = %s", (email,)
-                        )
-                        print("query")
+        try:
+            mydb = mysql.connector.connect(
+                host="localhost",
+                user="root",
+                password="chancekababy2021",
+                database="project",
+            )
+            mycursor = mydb.cursor()
+            print("Connected to database...")
+        except:
+            messagebox.showerror("Connection", "Failed")
+            return
 
-                        myresult = mycursor.fetchone()[0]
-                        print(myresult)
+        mycursor.execute("USE project")
+        print("project used...")
 
-                        if myresult == 0:
-                            # Insert into the database
-                            mycursor.execute(
-                                "INSERT INTO owner(name, password, email) VALUES (%s, %s, %s)",
-                                (name, password, email),
-                            )
+        mycursor.execute("SELECT COUNT(*) FROM owner WHERE email = %s", (email,))
+        print("query")
 
-                            mydb.commit()
+        myresult = mycursor.fetchone()[0]
+        print(myresult)
 
-                            messagebox.showinfo(
-                                "Success", "All Set! Go back and log into your account."
-                            )
-                        else:
-                            messagebox.showerror("Invalid!", "Account already exists!")
-                            return
+        if myresult != 0:
+            messagebox.showerror("Invalid!", "Account already exists!")
+            return
+
+        mycursor.execute(
+            "INSERT INTO owner(name, password, email) VALUES (%s, %s, %s)",
+            (name, password, email),
+        )
+
+        mydb.commit()
+
+        messagebox.showinfo("Success", "All Set! Go back and log into your account.")
 
     # sign up window
     signup_window = tk.Toplevel(parent)
