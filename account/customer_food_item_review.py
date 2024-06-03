@@ -2,10 +2,9 @@ import tkinter as tk
 from tkinter import ttk
 from tkinter import messagebox
 import mysql.connector
-import Customer_FoodItems
 
 
-def FoodItem_Reviews(parent, item_id, establishment_id, account_id):
+def customer_food_item_review(parent, item_id, establishment_id, account_id):
     def connect_to_db():
         try:
             database = mysql.connector.connect(

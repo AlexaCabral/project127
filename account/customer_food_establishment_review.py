@@ -2,7 +2,7 @@ import tkinter as tk
 from tkinter import ttk
 from tkinter import messagebox
 import mysql.connector
-import Customer_FoodItems
+import customer_food_item
 
 
 def customer_food_establishment_review(parent, establishment_id, account_id):
@@ -302,7 +302,7 @@ def customer_food_establishment_review(parent, establishment_id, account_id):
     def view_food_items():
         print("Food Items button clicked")
         customer_food_establishment_review_window.withdraw()
-        Customer_FoodItems.FoodReviews(
+        customer_food_item.customer_food_item(
             customer_food_establishment_review_window, account_id, establishment_id
         )
 
@@ -361,9 +361,10 @@ def customer_food_establishment_review(parent, establishment_id, account_id):
         customer_food_establishment_review_window,
         text="Back",
         font=("Arial", 12, "bold"),
-        bg="white",
-        fg="#FFBA00",
+        bg="#B46617",
+        fg="white",
         command=go_back,
+        bd=0,
     )
     back_button.grid(row=5, column=1, pady=20)
 
@@ -371,9 +372,10 @@ def customer_food_establishment_review(parent, establishment_id, account_id):
         customer_food_establishment_review_window,
         text="Add Review",
         font=("Arial", 12, "bold"),
-        bg="white",
-        fg="#FFBA00",
+        bg="#B46617",
+        fg="white",
         command=add_review,
+        bd=0,
     )
     add_button.grid(row=5, column=2, pady=20)
 
@@ -381,9 +383,10 @@ def customer_food_establishment_review(parent, establishment_id, account_id):
         customer_food_establishment_review_window,
         text="Food Items",
         font=("Arial", 12, "bold"),
-        bg="white",
-        fg="#FFBA00",
+        bg="#B46617",
+        fg="white",
         command=view_food_items,
+        bd=0,
     )
     view_items_button.grid(row=5, column=0, pady=20)
 
