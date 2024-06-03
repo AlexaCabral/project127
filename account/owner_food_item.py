@@ -606,13 +606,6 @@ def owner_food_item(establishment_id):
             name_entry.pack(pady=(5, 0))
             tk.Frame(card, height=2, bd=1, relief='flat', bg="#656565").pack(fill='x', padx=5)
 
-            tk.Label(card, text="Description", font=("Helvetica", 10, "bold"), bg="#FFFFFF", fg="#B46617").pack(pady=(5, 0))
-            desc_entry = tk.Entry(
-                card, textvariable=desc_var, font=("Helvetica", 14, "bold"), state="normal", bg="#FFFFFF", fg="#FFBA00", bd=0, justify='center'
-            )
-            desc_entry.pack(pady=(5, 0))
-            tk.Frame(card, height=2, bd=1, relief='flat', bg="#656565").pack(fill='x', padx=5)
-
             tk.Label(card, text="Price", font=("Helvetica", 10, "bold"), bg="#FFFFFF", fg="#B46617").pack(pady=(5, 0))
             price_entry = tk.Entry(
                 card, textvariable=price_var, font=("Helvetica", 14, "bold"), state="normal", bg="#FFFFFF", fg="#FFBA00", bd=0, justify='center'
@@ -627,6 +620,20 @@ def owner_food_item(establishment_id):
             food_types_entry.pack(pady=(5, 0))
             tk.Frame(card, height=2, bd=1, relief='flat', bg="#656565").pack(fill='x', padx=5)
             
+            tk.Label(
+                card, 
+                text="Description", 
+                font=("Helvetica", 10, "bold"), 
+                bg="#FFFFFF", 
+                fg="#B46617"
+            ).pack(pady=(5, 0))
+            desc_entry = tk.Entry(
+                card, textvariable=desc_var, font=("Helvetica", 8, "bold"), state="normal", bg="#FFFFFF", fg="#FFBA00", bd=0, justify='center', width=30
+            )
+            desc_entry.pack(pady=(5, 0))
+            tk.Frame(card, height=2, bd=1, relief='flat', bg="#656565").pack(fill='x', padx=5)
+
+
             def save_changes(
                 item_id,
                 name_var1,
