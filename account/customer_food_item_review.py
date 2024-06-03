@@ -19,35 +19,25 @@ def customer_food_item_review(parent, item_id, establishment_id, account_id):
             messagebox.showerror("Connection", f"Failed: {err}")
             return None
 
-    def fetch_reviews(item_id):
+    def search_food_item_review():
         database = connect_to_db()
         if not database:
             return []
-
         database_cursor = database.cursor()
+
         query = f"SELECT review_id, rating, review_text FROM food_review WHERE item_id = {item_id} AND establishment_id = {establishment_id}"
         database_cursor.execute(query)
         results = database_cursor.fetchall()
-
-        reviews = [
-            {
-                "review_id": r[0],
-                "rating": r[1],
-                "review_text": r[2],
-            }
-            for r in results
-        ]
-
         database_cursor.close()
         database.close()
-        return reviews
+        return results
 
     def add_review_to_db(review):
         database = connect_to_db()
         if not database:
             return None
-
         database_cursor = database.cursor()
+
         query = "INSERT INTO food_review (rating, review_text, account_id, item_id, establishment_id) VALUES (%s, %s, %s, %s, %s)"
         database_cursor.execute(
             query,
@@ -64,22 +54,21 @@ def customer_food_item_review(parent, item_id, establishment_id, account_id):
         review_id = database_cursor.lastrowid
         database_cursor.close()
         database.close()
+
         return review_id
 
     def update_review_in_db(review):
         database = connect_to_db()
         if not database:
             return
-
         database_cursor = database.cursor()
-        query = "UPDATE food_review SET rating = %s, review_text = %s WHERE review_id = %s"
+
+        query = (
+            "UPDATE food_review SET rating = %s, review_text = %s WHERE review_id = %s"
+        )
         database_cursor.execute(
             query,
-            (
-                review["rating"],
-                review["review_text"],
-                review["review_id"]
-            ),
+            (review["rating"], review["review_text"], review["review_id"]),
         )
         database.commit()
 
@@ -90,8 +79,8 @@ def customer_food_item_review(parent, item_id, establishment_id, account_id):
         database = connect_to_db()
         if not database:
             return
-
         database_cursor = database.cursor()
+
         query = "DELETE FROM food_review WHERE review_id = %s"
         database_cursor.execute(query, (review_id,))
         database.commit()
@@ -100,8 +89,8 @@ def customer_food_item_review(parent, item_id, establishment_id, account_id):
         database.close()
 
     def add_review():
-        dialog = AddReviewDialog(FoodItemReviews)
-        FoodItemReviews.wait_window(dialog.top)
+        dialog = AddReviewDialog(customer_food_item_review_window)
+        customer_food_item_review_window.wait_window(dialog.top)
         if dialog.result:
             review_id = add_review_to_db(dialog.result)
             if review_id:
@@ -115,11 +104,11 @@ def customer_food_item_review(parent, item_id, establishment_id, account_id):
             self.top.geometry("300x300")
             self.result = None
 
-            tk.Label(self.top, text="Rating (1-5):").pack()
+            tk.Label(self.top, text="Rating (1-5)").pack()
             self.rating_entry = ttk.Entry(self.top)
             self.rating_entry.pack()
 
-            tk.Label(self.top, text="Review Text:").pack()
+            tk.Label(self.top, text="Review Text").pack()
             self.review_text_entry = ttk.Entry(self.top)
             self.review_text_entry.pack()
 
@@ -161,79 +150,204 @@ def customer_food_item_review(parent, item_id, establishment_id, account_id):
             self.top.destroy()
 
     def create_new_box(review):
-        new_box_frame = ttk.Frame(FoodItemReviews, borderwidth=1, relief="solid")
-        total_boxes = len(FoodItemReviews.grid_slaves()) - 1
-        row_position = total_boxes // 3 + 1
+        new_box_frame = tk.Frame(
+            boxes_frame,
+            bg="#FFFFFF",
+            borderwidth=1,
+            relief="solid",
+            width=300,
+            height=250,
+        )
+        new_box_frame.grid_propagate(False)
+        new_box_frame.columnconfigure(0, weight=1)
+        total_boxes = len(boxes_frame.grid_slaves())
+        row_position = total_boxes // 3
         column_position = total_boxes % 3
 
-        new_box_frame.grid(row=row_position, column=column_position, padx=20, pady=30, sticky="nsew")
+        new_box_frame.grid(
+            row=row_position, column=column_position, padx=20, pady=30, sticky="nsew"
+        )
 
-        details_label = tk.Label(new_box_frame, text=f"ID: {review['review_id']}\nRating: {review['rating']}\nReview: {review['review_text']}")
-        details_label.pack(expand=True)
+        container = tk.Frame(new_box_frame, bg="#FFFFFF", bd=0)
+        container.columnconfigure(0, weight=1)
+        container.columnconfigure(1, weight=1)
+        container.grid(row=1, column=0, padx=5, pady=5, sticky="ew")
 
-        edit_button = ttk.Button(new_box_frame, text="Edit", command=lambda: edit_review(new_box_frame, review))
-        edit_button.pack(side="left", padx=5)
+        review_id_label = tk.Label(
+            container,
+            bg="#FFFFFF",
+            text="Review ID",
+            font=("Helvetica", 10, "bold"),
+            fg="#B46617",
+        )
+        review_id_label.grid(row=0, column=0, sticky="w", padx=5, pady=5)
+        review_id_value_label = tk.Label(
+            container,
+            bg="#FFFFFF",
+            text=review["review_id"],
+            font=("Helvetica Neue Light", 10),
+            fg="#B46617",
+        )
+        review_id_value_label.grid(row=0, column=1, sticky="e", padx=5, pady=5)
 
-        delete_box_button = ttk.Button(new_box_frame, text="Delete", command=lambda: delete_box(new_box_frame, review["review_id"]))
-        delete_box_button.pack(side="left", padx=5)
+        rating_label = tk.Label(
+            container,
+            bg="#FFFFFF",
+            text="Rating",
+            font=("Helvetica", 10, "bold"),
+            fg="#B46617",
+        )
+        rating_label.grid(row=1, column=0, sticky="w", padx=5, pady=5)
+        rating_value_label = tk.Label(
+            container,
+            bg="#FFFFFF",
+            text=review["rating"],
+            font=("Helvetica Neue Light", 10),
+            fg="#B46617",
+        )
+        rating_value_label.grid(row=1, column=1, sticky="e", padx=5, pady=5)
+
+        review_text_label = tk.Label(
+            new_box_frame,
+            bg="#FFFFFF",
+            text="Review text",
+            font=("Helvetica", 10, "bold"),
+            fg="#B46617",
+        )
+        review_text_label.grid(row=2, column=0, sticky="ew", padx=5, pady=5)
+        review_text_text = tk.Text(
+            new_box_frame,
+            bg="#FFFFFF",
+            font=("Helvetica Neue Light", 10),
+            wrap="word",
+            height=5,
+            bd=0,
+            fg="#B46617",
+        )
+        review_text_text.insert(tk.END, review["review_text"])
+        review_text_text.configure(state="disabled")
+        review_text_text.grid(row=3, column=0, sticky="ew", padx=10, pady=5)
+
+        edit_button = tk.Button(
+            new_box_frame,
+            text="Edit",
+            font=("Helvetica", 10),
+            command=lambda: edit_review(new_box_frame, review),
+            bg="#B46617",
+            fg="white",
+            bd=0,
+        )
+        edit_button.grid(row=3, column=0, columnspan=1, pady=5, sticky="s")
+
+        delete_box_button = tk.Button(
+            new_box_frame,
+            text="Delete",
+            font=("Helvetica", 10),
+            command=lambda: delete_box(new_box_frame, review["review_id"]),
+            bg="#B46617",
+            fg="white",
+            bd=0,
+        )
+        delete_box_button.grid(row=4, column=0, columnspan=1, pady=5, sticky="s")
 
         if total_boxes % 3 == 2:
-            FoodItemReviews.grid_rowconfigure(row_position + 1, weight=1)
+            customer_food_item_review_window.grid_rowconfigure(
+                row_position + 1, weight=1
+            )
 
     def delete_box(box_frame, review_id):
         delete_review_from_db(review_id)
         box_frame.destroy()
 
     def edit_review(box_frame, review):
-        dialog = EditReviewDialog(FoodItemReviews, review)
-        FoodItemReviews.wait_window(dialog.top)
+        dialog = EditReviewDialog(customer_food_item_review_window, review)
+        customer_food_item_review_window.wait_window(dialog.top)
         if dialog.result:
             update_review_in_db(dialog.result)
             review.update(dialog.result)
-            for widget in box_frame.winfo_children():
-                widget.destroy()
-
-            details_label = tk.Label(box_frame, text=f"ID: {review['review_id']}\nRating: {review['rating']}\nReview: {review['review_text']}")
-            details_label.pack(expand=True)
-
-            edit_button = ttk.Button(box_frame, text="Edit", command=lambda: edit_review(box_frame, review))
-            edit_button.pack(side="left", padx=5)
-
-            delete_box_button = ttk.Button(box_frame, text="Delete", command=lambda: delete_box(box_frame, review["review_id"]))
-            delete_box_button.pack(side="left", padx=5)
+            load_initial_data()
 
     def go_back():
         parent.deiconify()
-        FoodItemReviews.destroy()
+        customer_food_item_review_window.destroy()
 
-    FoodItemReviews = tk.Tk()
-    FoodItemReviews.geometry("1100x650")
-    FoodItemReviews.title("Food Item Reviews")
-    FoodItemReviews.resizable(False, False)
-    FoodItemReviews.configure(bg="#D3D3D3")
+    def clear_boxes():
+        for widget in boxes_frame.grid_slaves():
+            widget.destroy()
 
-    label1 = tk.Label(FoodItemReviews, text="Food Item Reviews", font=('Arial', 20, 'bold'), bg="white", fg="#FFBA00", anchor="w")
-    label1.grid(row=0, column=0, columnspan=3, sticky="new")
+    def load_initial_data():
+        clear_boxes()
+        food_item_reviews = search_food_item_review()
+        for food_item_review in food_item_reviews:
+            food_item_review = {
+                "review_id": food_item_review[0],
+                "rating": food_item_review[1],
+                "review_text": food_item_review[2],
+            }
+            create_new_box(food_item_review)
 
-    FoodItemReviews.columnconfigure(0, weight=1)
-    FoodItemReviews.columnconfigure(1, weight=1)
-    FoodItemReviews.rowconfigure(0, weight=1)
+    customer_food_item_review_window = tk.Tk()
+    customer_food_item_review_window.geometry("1100x650")
+    customer_food_item_review_window.title("Food Item Reviews")
+    customer_food_item_review_window.resizable(False, False)
+    customer_food_item_review_window.configure(bg="#FFFFFF")
 
-    for i in range(3):
-        FoodItemReviews.columnconfigure(i, weight=1)
-        FoodItemReviews.rowconfigure(i + 1, weight=1)
+    label1 = tk.Label(
+        customer_food_item_review_window,
+        text="FOOD ITEM REVIEWS",
+        font=("Helvetica", 20, "bold"),
+        bg="white",
+        fg="#FFBA00",
+        anchor="n",
+    )
+    label1.grid(row=0, column=0, columnspan=3, sticky="new", pady=10)
 
-    reviews = fetch_reviews(item_id)
-    for review in reviews:
-        create_new_box(review)
+    canvas = tk.Canvas(customer_food_item_review_window, bg="#FFFFFF")
+    scroll_y = tk.Scrollbar(
+        customer_food_item_review_window,
+        orient="vertical",
+        command=canvas.yview,
+    )
+    scroll_frame = tk.Frame(canvas, bg="#FFFFFF")
+    scroll_frame.bind(
+        "<Configure>", lambda e: canvas.configure(scrollregion=canvas.bbox("all"))
+    )
 
-    button_frame = ttk.Frame(FoodItemReviews)
-    button_frame.grid(row=4, column=0, columnspan=3, pady=20)
+    canvas.create_window((0, 0), window=scroll_frame, anchor="nw")
+    canvas.configure(yscrollcommand=scroll_y.set)
 
-    add_button = ttk.Button(button_frame, text="Add New Review", command=add_review)
-    add_button.grid(row=0, column=0, padx=10)
+    scroll_y.grid(row=2, column=3, sticky="ns")
+    canvas.grid(row=2, column=0, columnspan=3, padx=(30, 20), sticky="nsew")
 
-    back_button = ttk.Button(button_frame, text="Back", command=go_back)
-    back_button.grid(row=0, column=1, padx=10)
+    boxes_frame = tk.Frame(scroll_frame, bg="#FFFFFF")
+    boxes_frame.grid(row=0, column=0, sticky="nsew")
 
-    FoodItemReviews.mainloop()
+    back_button = tk.Button(
+        customer_food_item_review_window,
+        text="Back",
+        font=("Arial", 12, "bold"),
+        bg="#B46617",
+        fg="white",
+        command=go_back,
+        bd=0,
+    )
+    back_button.grid(row=5, column=0, pady=20)
+
+    add_button = tk.Button(
+        customer_food_item_review_window,
+        text="Add Review",
+        font=("Arial", 12, "bold"),
+        bg="#B46617",
+        fg="white",
+        command=add_review,
+        bd=0,
+    )
+    add_button.grid(row=5, column=2, pady=20)
+
+    customer_food_item_review_window.columnconfigure(0, weight=1)
+    customer_food_item_review_window.columnconfigure(1, weight=1)
+    customer_food_item_review_window.columnconfigure(2, weight=1)
+    customer_food_item_review_window.rowconfigure(5, weight=1)
+
+    load_initial_data()
+    customer_food_item_review_window.mainloop()
