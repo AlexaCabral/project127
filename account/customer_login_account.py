@@ -22,6 +22,7 @@ from io import BytesIO
 import customer_signup_account
 import owner_login_account
 import customer_food_establishment
+from reports import MainSystem
 
 
 # Functions
@@ -104,7 +105,9 @@ def login():
         else:
             messagebox.showinfo("Log in", "Welcome.")
             root.withdraw()
-            customer_food_establishment.customer_food_establishment(account_id=myresult[0])
+            new_root = tk.Tk()
+            MainSystem(new_root, user_type="customer", account_id=myresult[0])
+            new_root.mainloop()
 
 
 # root window
