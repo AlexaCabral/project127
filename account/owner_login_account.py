@@ -81,7 +81,7 @@ def new_window(parent):
         messagebox.showinfo("Log in", "Welcome.")
         new_window.withdraw()
         new_root = tk.Tk()
-        MainSystem(new_root, user_type="customer", account_id=myresult[0])
+        MainSystem(new_root, user_type="owner", account_id=myresult[0])
         new_root.mainloop()
 
     # owner log in window

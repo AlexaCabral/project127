@@ -4,6 +4,7 @@ from tkinter import messagebox
 import mysql.connector
 from owner_food_item import owner_food_item
 
+
 def owner_food_establishment(account_id):
     # Function to establish a database connection
     def connect_to_db():
@@ -57,7 +58,7 @@ def owner_food_establishment(account_id):
             )
             database_cursor.execute(query, values)
             database.commit()
-            dialog.result["estab_id"] = database_cursor.lastrowid
+            dialog.result["establishment_id"] = database_cursor.lastrowid
             database_cursor.close()
             database.close()
             create_new_box(dialog.result)
@@ -69,19 +70,49 @@ def owner_food_establishment(account_id):
             self.top.geometry("300x200")
             self.result = None
 
-            tk.Label(self.top, text="Establishment Name:", foreground="#B46617", font=("Helvetica", 12, "bold")).pack()
-            self.estab_name_entry = ttk.Entry(self.top, foreground="black", font=("Helvetica", 11))
+            tk.Label(
+                self.top,
+                text="Establishment Name:",
+                foreground="#B46617",
+                font=("Helvetica", 12, "bold"),
+            ).pack()
+            self.estab_name_entry = ttk.Entry(
+                self.top, foreground="black", font=("Helvetica", 11)
+            )
             self.estab_name_entry.pack()
 
-            tk.Label(self.top, text="Location:", foreground="#B46617", font=("Helvetica", 12, "bold")).pack()
-            self.location_entry = ttk.Entry(self.top, foreground="black", font=("Helvetica", 11))
+            tk.Label(
+                self.top,
+                text="Location:",
+                foreground="#B46617",
+                font=("Helvetica", 12, "bold"),
+            ).pack()
+            self.location_entry = ttk.Entry(
+                self.top, foreground="black", font=("Helvetica", 11)
+            )
             self.location_entry.pack()
 
-            tk.Label(self.top, text="Description:", foreground="#B46617", font=("Helvetica", 12, "bold")).pack()
-            self.description_entry = ttk.Entry(self.top, foreground="black", font=("Helvetica", 11))
+            tk.Label(
+                self.top,
+                text="Description:",
+                foreground="#B46617",
+                font=("Helvetica", 12, "bold"),
+            ).pack()
+            self.description_entry = ttk.Entry(
+                self.top, foreground="black", font=("Helvetica", 11)
+            )
             self.description_entry.pack()
 
-            tk.Button(self.top, text="Add", command=self.add, font=("Helvetica", 10, "bold"), fg="white", bg="#B46617", activebackground="#FFBA00", activeforeground="white").pack()
+            tk.Button(
+                self.top,
+                text="Add",
+                command=self.add,
+                font=("Helvetica", 10, "bold"),
+                fg="white",
+                bg="#B46617",
+                activebackground="#FFBA00",
+                activeforeground="white",
+            ).pack()
 
         def add(self):
             self.result = {
@@ -98,22 +129,50 @@ def owner_food_establishment(account_id):
             self.top.geometry("300x200")
             self.result = None
 
-            tk.Label(self.top, text="Establishment Name:", foreground="#B46617", font=("Helvetica", 12, "bold")).pack()
-            self.estab_name_entry = ttk.Entry(self.top, foreground="black", font=("Helvetica", 11))
+            tk.Label(
+                self.top,
+                text="Establishment Name:",
+                foreground="#B46617",
+                font=("Helvetica", 12, "bold"),
+            ).pack()
+            self.estab_name_entry = ttk.Entry(
+                self.top, foreground="black", font=("Helvetica", 11)
+            )
             self.estab_name_entry.pack()
             self.estab_name_entry.insert(0, item["name"])
 
-            tk.Label(self.top, text="Location:", foreground="#B46617", font=("Helvetica", 12, "bold")).pack()
-            self.location_entry = ttk.Entry(self.top, foreground="black", font=("Helvetica", 11))
+            tk.Label(
+                self.top,
+                text="Location:",
+                foreground="#B46617",
+                font=("Helvetica", 12, "bold"),
+            ).pack()
+            self.location_entry = ttk.Entry(
+                self.top, foreground="black", font=("Helvetica", 11)
+            )
             self.location_entry.pack()
             self.location_entry.insert(0, item["location"])
 
-            tk.Label(self.top, text="Description:", foreground="#B46617", font=("Helvetica", 12, "bold")).pack()
-            self.description_entry = ttk.Entry(self.top, foreground="black", font=("Helvetica", 11))
+            tk.Label(
+                self.top,
+                text="Description:",
+                foreground="#B46617",
+                font=("Helvetica", 12, "bold"),
+            ).pack()
+            self.description_entry = ttk.Entry(
+                self.top, foreground="black", font=("Helvetica", 11)
+            )
             self.description_entry.pack()
             self.description_entry.insert(0, item["description"])
 
-            button = tk.Button(self.top, text="Update", command=self.update, font=("Helvetica", 10, "bold"), fg="white", bg="#B46617")
+            button = tk.Button(
+                self.top,
+                text="Update",
+                command=self.update,
+                font=("Helvetica", 10, "bold"),
+                fg="white",
+                bg="#B46617",
+            )
             button.pack()
 
         def update(self):
@@ -125,13 +184,28 @@ def owner_food_establishment(account_id):
             self.top.destroy()
 
     def create_new_box(establishment):
-        ttk.Style().configure("Custom.TFrame", background="white", font=("Helvetica", 10, "bold"))
+        ttk.Style().configure(
+            "Custom.TFrame", background="white", font=("Helvetica", 10, "bold")
+        )
         style = ttk.Style()
-        style.configure("Green.TButton", background="#B46617", foreground="#B46617", font=("Helvetica", 10, "bold"))
+        style.configure(
+            "Green.TButton",
+            background="#B46617",
+            foreground="#B46617",
+            font=("Helvetica", 10, "bold"),
+        )
 
-        new_box_frame = ttk.Frame(boxes_frame, borderwidth=1, relief="solid", style="Custom.TFrame")
+        new_box_frame = ttk.Frame(
+            boxes_frame, borderwidth=1, relief="solid", style="Custom.TFrame", width=300, height=300
+        )
 
-        total_boxes = len([child for child in boxes_frame.grid_slaves() if isinstance(child, ttk.Frame)])
+        total_boxes = len(
+            [
+                child
+                for child in boxes_frame.grid_slaves()
+                if isinstance(child, ttk.Frame)
+            ]
+        )
 
         row_position = total_boxes // 3
         column_position = total_boxes % 3
@@ -139,9 +213,21 @@ def owner_food_establishment(account_id):
         padx_value = 10
         pady_value = 10
 
-        new_box_frame.grid(row=row_position, column=column_position, padx=padx_value, pady=pady_value, sticky="nsew")
+        new_box_frame.grid(
+            row=row_position,
+            column=column_position,
+            padx=padx_value,
+            pady=pady_value,
+            sticky="nsew",
+        )
 
-        item_name_label = tk.Label(new_box_frame, text=establishment["name"].strip(), bg="white", font=("Helvetica", 20, "bold"), foreground="#FFA500")
+        item_name_label = tk.Label(
+            new_box_frame,
+            text=establishment["name"].strip(),
+            bg="white",
+            font=("Helvetica", 20, "bold"),
+            foreground="#FFA500",
+        )
         item_name_label.pack(expand=True, pady=10)
 
         details_frame = tk.Frame(new_box_frame, bg="white")
@@ -149,15 +235,27 @@ def owner_food_establishment(account_id):
 
         # Create labels for each piece of information
         labels = [
-            ("ID:", establishment['estab_id']),
-            ("Location:", establishment['location']),
-            ("Description:", establishment['description'])
+            ("ID:", establishment["establishment_id"]),
+            ("Location:", establishment["location"]),
+            ("Description:", establishment["description"]),
         ]
 
         # Iterate through the labels and add them to the grid
         for i, (label_text, value) in enumerate(labels):
-            label_key = tk.Label(details_frame, text=label_text, font=("Helvetica", 14), fg="#B46617", bg="white")
-            label_value = tk.Label(details_frame, text=value, font=("Helvetica", 14), fg="black", bg="white")
+            label_key = tk.Label(
+                details_frame,
+                text=label_text,
+                font=("Helvetica", 14),
+                fg="#B46617",
+                bg="white",
+            )
+            label_value = tk.Label(
+                details_frame,
+                text=value,
+                font=("Helvetica", 14),
+                fg="black",
+                bg="white",
+            )
 
             label_key.grid(row=i, column=0, sticky="w", padx=5, pady=2)
             label_value.grid(row=i, column=1, sticky="w", padx=5, pady=2)
@@ -183,7 +281,9 @@ def owner_food_establishment(account_id):
         delete_button = tk.Button(
             edit_delete_frame,
             text="Delete",
-            command=lambda: delete_box(new_box_frame, establishment["estab_id"]),
+            command=lambda: delete_box(
+                new_box_frame, establishment["establishment_id"]
+            ),
             font=("Helvetica", 10, "bold"),
             fg="white",
             bg="#B46617",
@@ -198,7 +298,9 @@ def owner_food_establishment(account_id):
         check_items_button = tk.Button(
             new_box_frame,
             text="Check Food Items",
-            command=lambda estab_id=establishment["estab_id"]: check_food_items(estab_id),
+            command=lambda establishment_id=establishment[
+                "establishment_id"
+            ]: check_food_items(establishment_id),
             font=("Helvetica", 10, "bold"),
             fg="white",
             bg="#B46617",
@@ -213,14 +315,14 @@ def owner_food_establishment(account_id):
     def check_food_items(establishment_id):
         owner_food_item(establishment_id)
 
-    def delete_box(box_frame, estab_id):
+    def delete_box(box_frame, establishment_id):
         database = connect_to_db()
         if not database:
             return
         database_cursor = database.cursor()
         try:
             query = "SELECT item_id FROM food_item WHERE establishment_id=%s"
-            database_cursor.execute(query, (estab_id,))
+            database_cursor.execute(query, (establishment_id,))
             item_ids = [row[0] for row in database_cursor.fetchall()]
 
             for item_id in item_ids:
@@ -228,23 +330,22 @@ def owner_food_establishment(account_id):
                 database_cursor.execute(query, (item_id,))
 
             query = "DELETE FROM food_item WHERE establishment_id=%s"
-            database_cursor.execute(query, (estab_id,))
+            database_cursor.execute(query, (establishment_id,))
 
             query = "DELETE FROM food_establishment WHERE establishment_id=%s"
-            database_cursor.execute(query, (estab_id,))
+            database_cursor.execute(query, (establishment_id,))
 
             database.commit()
 
             database_cursor.close()
             database.close()
 
-            box_frame.destroy()
+            on_search()
         except Exception as e:
             database.rollback()
             database_cursor.close()
             database.close()
             print("Error occurred:", e)
-
 
     def edit_item(box_frame, establishment):
         dialog = EditItemDialog(foodestabWindow, establishment)
@@ -256,31 +357,28 @@ def owner_food_establishment(account_id):
             database_cursor = database.cursor()
             query = (
                 "UPDATE food_establishment SET name = %s, location = %s, description = %s "
-                "WHERE estab_id = %s"
+                "WHERE establishment_id = %s"
             )
             values = (
                 dialog.result["name"],
                 dialog.result["location"],
                 dialog.result["description"],
-                establishment["estab_id"],
+                establishment["establishment_id"],
             )
             database_cursor.execute(query, values)
             database.commit()
             database_cursor.close()
             database.close()
-            
-            establishment.update(dialog.result)
-            for widget in box_frame.winfo_children():
-                widget.destroy()
 
-            create_new_box(establishment)
-    
-    def load_initial_data():
+            establishment.update(dialog.result)
+            on_search()
+
+    def load_initial_data(name=""):
         clear_boxes()
-        establishments_data = search_food_establishment("")
+        establishments_data = search_food_establishment(name)
         for establishment in establishments_data:
             establishment_dict = {
-                "estab_id": establishment[0],
+                "establishment_id": establishment[0],
                 "location": establishment[1],
                 "description": establishment[2],
                 "average_rating": establishment[3],
@@ -288,26 +386,15 @@ def owner_food_establishment(account_id):
                 "account_id": establishment[5],
             }
             create_new_box(establishment_dict)
-    
+
     def clear_boxes():
         for widget in boxes_frame.grid_slaves():
             widget.destroy()
 
     def on_search():
         name = search_entry.get()
-        clear_boxes()
-        establishments_data = search_food_establishment(name)
-        for establishment in establishments_data:
-            establishment_dict = {
-                "estab_id": establishment[0],
-                "location": establishment[1],
-                "description": establishment[2],
-                "average_rating": establishment[3],
-                "name": establishment[4],
-                "account_id": establishment[5],
-            }
-            create_new_box(establishment_dict)
-    
+        load_initial_data(name)
+
     foodestabWindow = tk.Tk()
     foodestabWindow.geometry("1100x650")
     foodestabWindow.configure(bg="white")
@@ -315,9 +402,6 @@ def owner_food_establishment(account_id):
 
     search_frame = tk.Frame(foodestabWindow, bg="white")
     search_frame.pack(pady=20)
-
-    search_label = tk.Label(search_frame, text="Search Food Establishment:", bg="white", foreground="#B46617", font=("Helvetica", 12, "bold"))
-    search_label.pack(side="left")
 
     search_entry = ttk.Entry(search_frame, foreground="black", font=("Helvetica", 11))
     search_entry.pack(side="left")
@@ -330,7 +414,8 @@ def owner_food_establishment(account_id):
         fg="white",
         bg="#B46617",
         activebackground="#FFBA00",
-        activeforeground="white"
+        activeforeground="white",
+        bd=0,
     )
     search_button.pack(side="left", padx=10)
 
@@ -342,7 +427,8 @@ def owner_food_establishment(account_id):
         fg="white",
         bg="#B46617",
         activebackground="#FFBA00",
-        activeforeground="white"
+        activeforeground="white",
+        bd=0,
     )
     add_item_button.pack(side="left", padx=10)
 
@@ -367,9 +453,5 @@ def owner_food_establishment(account_id):
     foodestabWindow.columnconfigure(2, weight=1)
     foodestabWindow.rowconfigure(2, weight=1)
 
-    for i in range(3):
-        foodestabWindow.columnconfigure(i, weight=1)
-        foodestabWindow.rowconfigure(i + 2, weight=1)
-    
     load_initial_data()
     foodestabWindow.mainloop()
