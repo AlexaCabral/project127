@@ -105,7 +105,7 @@ class MainSystem:
         else:
             owner_food_establishment_button = Button(
                 navbar,
-                text="Manage reviews",
+                text="Manage establishments",
                 font=("Courier", 13, "bold"),
                 bd=0,
                 bg="#FFBA00",
