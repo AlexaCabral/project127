@@ -78,7 +78,7 @@ class MainSystem:
             fg="#725B32",
             activeforeground="white",
             cursor="hand2",
-            command=self.go_back
+            command=self.go_back,
         )
 
         # button placements
@@ -109,9 +109,9 @@ class MainSystem:
     def review_detail(self):
         self.new_window = Toplevel(self.root)
         self.app = ReviewWindow(self.new_window)
-    
+
     def go_back(self):
-        self.root.withdraw()
+        self.root.destroy()
 
 
 # main window
