@@ -26,7 +26,7 @@ def customer_food_establishment(account_id):
             return []
         database_cursor = database.cursor()
 
-        query = f"SELECT * FROM food_establishment WHERE account_id = {account_id} AND name LIKE '%{name}%'"
+        query = f"SELECT * FROM food_establishment WHERE name LIKE '%{name}%'"
         database_cursor.execute(query)
         results = database_cursor.fetchall()
 
@@ -226,6 +226,3 @@ def customer_food_establishment(account_id):
 
     load_initial_data()
     customer_food_establishment_window.mainloop()
-
-
-customer_food_establishment(1)

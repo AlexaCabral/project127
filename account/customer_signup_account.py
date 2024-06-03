@@ -110,7 +110,7 @@ def signup(parent):
                             mydb = mysql.connector.connect(
                                 host="localhost",
                                 user="root",
-                                password="server",
+                                password="chancekababy2021",
                                 database="project",
                             )
                             mycursor = mydb.cursor()

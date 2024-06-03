@@ -21,6 +21,7 @@ import requests
 from io import BytesIO
 import customer_signup_account
 import owner_login_account
+import customer_food_establishment
 
 
 # Functions
@@ -102,6 +103,8 @@ def login():
             messagebox.showerror("Invalid", "Invalid Email or Password.")
         else:
             messagebox.showinfo("Log in", "Welcome.")
+            root.withdraw()
+            customer_food_establishment.customer_food_establishment(account_id=myresult[0])
 
 
 # root window
