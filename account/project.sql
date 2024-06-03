@@ -81,7 +81,14 @@ INSERT INTO customer (name, password, email) VALUES ("customer", "password", "cu
 INSERT INTO customer (name, password, email) VALUES ("customer", "password1", "customer");
 
 -- valid
-INSERT INTO customer (name, password, email) VALUES ("customer", "password1", "customer@gugol.kom");
+-- INSERT INTO customer (name, password, email) VALUES ("customer", "password1", "customer@gugol.kom");
+
+-- Customer insertion
+INSERT INTO customer (account_id, name, password, email)
+VALUES 
+    (1, "Cyrene Millar", "cyrenemillar123", "cyrenelove127@gmail.com"),
+    (2, "Clyde Rubian", "clyderubian456", "clydelove127@gmail.com")
+;
 
 -- Owner insertion
 -- bad password format
@@ -89,7 +96,14 @@ INSERT INTO customer (name, password, email) VALUES ("customer", "password1", "c
 -- bad email format
 -- INSERT INTO owner VALUES(1, "owner", "password1", "customer");
 -- valid
-INSERT INTO owner (name, password, email) VALUES ("owner", "password1", "customer@gugol.kom");
+-- INSERT INTO owner (name, password, email) VALUES ("owner", "password1", "customer@gugol.kom");
+
+INSERT INTO owner (account_id, name, password, email)
+VALUES 
+    (1, "Isaac Villamin", "ownervillamin157", "isaaclove127@gmail.com"),
+    (2, "Alexa Cabral", "ownercabral483", "alexalove127@gmail.com")
+;
+
 
 -- Food establishment insertion
 -- account id does not exist
@@ -349,3 +363,21 @@ VALUES
     (68, "Noodles"),
     (69, "Chicken"),
     (70, "Seafood");
+
+
+-- -- CUSTOMER INSERTION
+-- INSERT INTO customer (account_id, name, password, email)
+-- VALUES 
+--     (1234, "Cyrene Millar", "cyrenemillar123", "cyrenelove127@gmail.com"),
+--     (5678, "Clyde Rubian", "clyderubian456", "clydelove127@gmail.com")
+-- ;
+
+
+
+-- -- OWNER INSERTION
+
+-- INSERT INTO owner (account_id, name, password, email)
+-- VALUES 
+--     (1221, "Isaac Villamin", "", "cyrenelove127@gmail.com"),
+--     (3667, "Clyde Rubian", "clyderubian456", "clydelove127@gmail.com")
+-- ;
