@@ -22,7 +22,6 @@ from io import BytesIO
 import customer_signup_account
 import owner_login_account
 from customer_food_establishment import customer_food_establishment
-from reports import MainSystem
 
 
 # Functions

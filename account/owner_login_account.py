@@ -6,7 +6,6 @@ from PIL import Image, ImageTk
 import requests
 from io import BytesIO
 import owner_signup_account
-from reports import MainSystem
 from owner_food_establishment import owner_food_establishment
 
 
