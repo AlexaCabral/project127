@@ -6,7 +6,6 @@ from owner_food_item import owner_food_item
 
 
 def owner_food_establishment(account_id):
-    # Function to establish a database connection
     def connect_to_db():
         try:
             database = mysql.connector.connect(
@@ -21,7 +20,6 @@ def owner_food_establishment(account_id):
             messagebox.showerror("Connection", f"Failed: {err}")
             return None
 
-    # Function to search food establishments
     def search_food_establishment(name):
         database = connect_to_db()
         if not database:
@@ -36,10 +34,9 @@ def owner_food_establishment(account_id):
         database.close()
         return results
 
-    # Function to add a new food establishment
     def add_item():
-        dialog = AddItemDialog(foodestabWindow)
-        foodestabWindow.wait_window(dialog.top)
+        dialog = AddItemDialog(owner_food_establishment_window)
+        owner_food_establishment_window.wait_window(dialog.top)
         if dialog.result:
             database = connect_to_db()
             if not database:
@@ -184,41 +181,22 @@ def owner_food_establishment(account_id):
             self.top.destroy()
 
     def create_new_box(establishment):
-        ttk.Style().configure(
-            "Custom.TFrame", background="white", font=("Helvetica", 10, "bold")
+        new_box_frame = tk.Frame(
+            boxes_frame,
+            bg="#FFFFFF",
+            borderwidth=1,
+            relief="solid",
+            width=300,
+            height=400,
         )
-        style = ttk.Style()
-        style.configure(
-            "Green.TButton",
-            background="#B46617",
-            foreground="#B46617",
-            font=("Helvetica", 10, "bold"),
-        )
-
-        new_box_frame = ttk.Frame(
-            boxes_frame, borderwidth=1, relief="solid", style="Custom.TFrame", width=300, height=300
-        )
-
-        total_boxes = len(
-            [
-                child
-                for child in boxes_frame.grid_slaves()
-                if isinstance(child, ttk.Frame)
-            ]
-        )
-
+        new_box_frame.grid_propagate(False)
+        new_box_frame.columnconfigure(0, weight=1)
+        total_boxes = len(boxes_frame.grid_slaves())
         row_position = total_boxes // 3
         column_position = total_boxes % 3
 
-        padx_value = 10
-        pady_value = 10
-
         new_box_frame.grid(
-            row=row_position,
-            column=column_position,
-            padx=padx_value,
-            pady=pady_value,
-            sticky="nsew",
+            row=row_position, column=column_position, padx=20, pady=30, sticky="nsew"
         )
 
         item_name_label = tk.Label(
@@ -228,58 +206,81 @@ def owner_food_establishment(account_id):
             font=("Helvetica", 20, "bold"),
             foreground="#FFA500",
         )
-        item_name_label.pack(expand=True, pady=10)
+        item_name_label.grid(row=0, column=0, padx=5, pady=5, sticky="ew")
 
-        details_frame = tk.Frame(new_box_frame, bg="white")
-        details_frame.pack(expand=True, pady=2)
+        container = tk.Frame(new_box_frame, bg="#FFFFFF", bd=0)
+        container.columnconfigure(0, weight=1)
+        container.columnconfigure(1, weight=1)
+        container.grid(row=1, column=0, padx=5, pady=5, sticky="ew")
 
-        # Create labels for each piece of information
-        labels = [
-            ("ID:", establishment["establishment_id"]),
-            ("Location:", establishment["location"]),
-            ("Description:", establishment["description"]),
-        ]
+        establishment_id_label = tk.Label(
+            container,
+            bg="#FFFFFF",
+            text="Establishment ID",
+            font=("Helvetica", 10, "bold"),
+            fg="#B46617",
+        )
+        establishment_id_label.grid(row=0, column=0, sticky="w", padx=5, pady=5)
+        establishment_id_value_label = tk.Label(
+            container,
+            bg="#FFFFFF",
+            text=establishment["establishment_id"],
+            font=("Helvetica Neue Light", 10),
+            fg="#B46617",
+        )
+        establishment_id_value_label.grid(row=0, column=1, sticky="e", padx=5, pady=5)
 
-        # Iterate through the labels and add them to the grid
-        for i, (label_text, value) in enumerate(labels):
-            label_key = tk.Label(
-                details_frame,
-                text=label_text,
-                font=("Helvetica", 14),
-                fg="#B46617",
-                bg="white",
-            )
-            label_value = tk.Label(
-                details_frame,
-                text=value,
-                font=("Helvetica", 14),
-                fg="black",
-                bg="white",
-            )
+        location_label = tk.Label(
+            container,
+            bg="#FFFFFF",
+            text="Location",
+            font=("Helvetica", 10, "bold"),
+            fg="#B46617",
+        )
+        location_label.grid(row=1, column=0, sticky="w", padx=5, pady=5)
+        location_value_label = tk.Label(
+            container,
+            bg="#FFFFFF",
+            text=establishment["location"],
+            font=("Helvetica Neue Light", 10),
+            fg="#B46617",
+        )
+        location_value_label.grid(row=1, column=1, sticky="e", padx=5, pady=5)
 
-            label_key.grid(row=i, column=0, sticky="w", padx=5, pady=2)
-            label_value.grid(row=i, column=1, sticky="w", padx=5, pady=2)
-
-        edit_delete_frame = tk.Frame(new_box_frame, bg="white")
-        edit_delete_frame.pack()
+        description_label = tk.Label(
+            new_box_frame,
+            bg="#FFFFFF",
+            text="Description",
+            font=("Helvetica", 10, "bold"),
+            fg="#B46617",
+        )
+        description_label.grid(row=2, column=0, sticky="ew", padx=5, pady=5)
+        description_text = tk.Text(
+            new_box_frame,
+            bg="#FFFFFF",
+            font=("Helvetica Neue Light", 10),
+            wrap="word",
+            height=5,
+            bd=0,
+            fg="#B46617",
+        )
+        description_text.insert(tk.END, establishment["description"])
+        description_text.configure(state="disabled")
+        description_text.grid(row=3, column=0, sticky="ew", padx=10, pady=5)
 
         edit_button = tk.Button(
-            edit_delete_frame,
+            new_box_frame,
             text="Edit",
+            font=("Helvetica", 10),
             command=lambda: edit_item(new_box_frame, establishment),
-            font=("Helvetica", 10, "bold"),
-            fg="white",
             bg="#B46617",
+            fg="white",
             bd=0,
-            activebackground="#FFA500",
-            activeforeground="white",
-            cursor="hand2",
-            width=7,
         )
-        edit_button.pack(side="left", padx=3, pady=2)
+        edit_button.grid(row=4, column=0, columnspan=1, pady=5, sticky="s")
 
         delete_button = tk.Button(
-            edit_delete_frame,
+            new_box_frame,
             text="Delete",
             command=lambda: delete_box(
                 new_box_frame, establishment["establishment_id"]
@@ -293,7 +294,7 @@ def owner_food_establishment(account_id):
             cursor="hand2",
             width=7,
         )
-        delete_button.pack(side="left", padx=3, pady=2)
+        delete_button.grid(row=5, column=0, columnspan=1, pady=5, sticky="s")
 
         check_items_button = tk.Button(
             new_box_frame,
@@ -310,8 +311,13 @@ def owner_food_establishment(account_id):
             cursor="hand2",
             width=20,
         )
-        check_items_button.pack(side="top", padx=5, pady=2)
+        check_items_button.grid(row=6, column=0, columnspan=1, pady=5, sticky="s")
 
+        if total_boxes % 3 == 2:
+            owner_food_establishment_window.grid_rowconfigure(
+                row_position + 1, weight=1
+            )
+        
     def check_food_items(establishment_id):
         owner_food_item(establishment_id)
 
@@ -348,8 +354,8 @@ def owner_food_establishment(account_id):
             print("Error occurred:", e)
 
     def edit_item(box_frame, establishment):
-        dialog = EditItemDialog(foodestabWindow, establishment)
-        foodestabWindow.wait_window(dialog.top)
+        dialog = EditItemDialog(owner_food_establishment_window, establishment)
+        owner_food_establishment_window.wait_window(dialog.top)
         if dialog.result:
             database = connect_to_db()
             if not database:
@@ -395,16 +401,27 @@ def owner_food_establishment(account_id):
         name = search_entry.get()
         load_initial_data(name)
 
-    foodestabWindow = tk.Tk()
-    foodestabWindow.geometry("1100x650")
-    foodestabWindow.configure(bg="white")
-    foodestabWindow.title("My Food Establishments")
+    owner_food_establishment_window = tk.Tk()
+    owner_food_establishment_window.geometry("1100x650")
+    owner_food_establishment_window.title("My Food Establishments")
+    owner_food_establishment_window.resizable(False, False)
+    owner_food_establishment_window.configure(bg="white")
 
-    search_frame = tk.Frame(foodestabWindow, bg="white")
-    search_frame.pack(pady=20)
+    page_title = tk.Label(
+        owner_food_establishment_window,
+        text="MY FOOD ESTABLISHMENT",
+        font=("Helvetica", 20, "bold"),
+        bg="white",
+        fg="#FFBA00",
+        anchor="n",
+    )
+    page_title.grid(row=0, column=0, columnspan=3, sticky="new", pady=10)
 
-    search_entry = ttk.Entry(search_frame, foreground="black", font=("Helvetica", 11))
-    search_entry.pack(side="left")
+    search_frame = tk.Frame(owner_food_establishment_window, bg="#FFFFFF")
+    search_frame.grid(row=1, column=1, pady=10, padx=(180, 20), sticky="ew")
+
+    search_entry = tk.Entry(search_frame, font=("Helvetica", 12), width=50)
+    search_entry.pack(side=tk.LEFT, padx=30)
 
     search_button = tk.Button(
         search_frame,
@@ -417,7 +434,7 @@ def owner_food_establishment(account_id):
         activeforeground="white",
         bd=0,
     )
-    search_button.pack(side="left", padx=10)
+    search_button.pack(side=tk.LEFT, padx=10)
 
     add_item_button = tk.Button(
         search_frame,
@@ -432,26 +449,29 @@ def owner_food_establishment(account_id):
     )
     add_item_button.pack(side="left", padx=10)
 
-    canvas = tk.Canvas(foodestabWindow, bg="white")
-    canvas.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
+    canvas = tk.Canvas(owner_food_establishment_window, bg="#FFFFFF")
+    scroll_y = tk.Scrollbar(
+        owner_food_establishment_window, orient="vertical", command=canvas.yview
+    )
+    scroll_frame = tk.Frame(canvas, bg="#FFFFFF")
 
-    scrollbar = ttk.Scrollbar(foodestabWindow, orient="vertical", command=canvas.yview)
-    scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
+    scroll_frame.bind(
+        "<Configure>", lambda e: canvas.configure(scrollregion=canvas.bbox("all"))
+    )
 
-    boxes_frame = ttk.Frame(canvas, style="Custom.TFrame")
+    canvas.create_window((0, 0), window=scroll_frame, anchor="nw")
+    canvas.configure(yscrollcommand=scroll_y.set)
 
-    canvas.create_window((0, 0), window=boxes_frame, anchor="nw")
+    scroll_y.grid(row=2, column=3, sticky="ns")
+    canvas.grid(row=2, column=0, columnspan=3, padx=(30, 20), sticky="nsew")
 
-    def on_configure(event):
-        canvas.configure(scrollregion=canvas.bbox("all"))
+    boxes_frame = tk.Frame(scroll_frame, bg="#FFFFFF")
+    boxes_frame.grid(row=0, column=0, sticky="nsew")
 
-    boxes_frame.bind("<Configure>", on_configure)
-    canvas.configure(yscrollcommand=scrollbar.set)
-
-    foodestabWindow.columnconfigure(0, weight=1)
-    foodestabWindow.columnconfigure(1, weight=1)
-    foodestabWindow.columnconfigure(2, weight=1)
-    foodestabWindow.rowconfigure(2, weight=1)
+    owner_food_establishment_window.columnconfigure(0, weight=1)
+    owner_food_establishment_window.columnconfigure(1, weight=1)
+    owner_food_establishment_window.columnconfigure(2, weight=1)
+    owner_food_establishment_window.rowconfigure(2, weight=1)
 
     load_initial_data()
-    foodestabWindow.mainloop()
+    owner_food_establishment_window.mainloop()
