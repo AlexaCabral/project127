@@ -30,7 +30,7 @@ CREATE TABLE food_establishment(
     establishment_id INT(8) NOT NULL AUTO_INCREMENT,
     location VARCHAR(100) NOT NULL,
     description TEXT,
-    average_rating INT(2),
+    average_rating DECIMAL,
     name VARCHAR(50) NOT NULL,
     account_id INT(8) NOT NULL,
     PRIMARY KEY(establishment_id),

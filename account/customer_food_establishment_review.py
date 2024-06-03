@@ -33,6 +33,22 @@ def customer_food_establishment_review(parent, establishment_id, account_id):
         database.close()
         return results
 
+    def update_average_rating():
+        database = connect_to_db()
+        if not database:
+            return []
+        database_cursor = database.cursor()
+
+        query = "SELECT AVG(rating) FROM food_review WHERE establishment_id = %s"
+        database_cursor.execute(query, (establishment_id,))
+        new_avg_rating = database_cursor.fetchone()[0]
+
+        query = "UPDATE food_establishment SET average_rating = %s WHERE establishment_id = %s"
+        database_cursor.execute(query, (new_avg_rating, establishment_id,))
+        database.commit()
+        database_cursor.close()
+        database.close()
+
     def add_review_to_db(review):
         database = connect_to_db()
         if not database:
@@ -54,6 +70,8 @@ def customer_food_establishment_review(parent, establishment_id, account_id):
         review_id = database_cursor.lastrowid
         database_cursor.close()
         database.close()
+
+        update_average_rating()
 
         return review_id
 
@@ -79,6 +97,8 @@ def customer_food_establishment_review(parent, establishment_id, account_id):
         database_cursor.close()
         database.close()
 
+        update_average_rating()
+
     def delete_review_from_db(review_id):
         database = connect_to_db()
         if not database:
@@ -91,6 +111,8 @@ def customer_food_establishment_review(parent, establishment_id, account_id):
 
         database_cursor.close()
         database.close()
+
+        update_average_rating()
 
     def add_review():
         dialog = AddReviewDialog(customer_food_establishment_review_window)
