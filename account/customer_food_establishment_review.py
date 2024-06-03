@@ -127,55 +127,67 @@ def customer_food_establishment_review(parent, establishment_id, account_id):
         def __init__(self, parent):
             self.top = tk.Toplevel(parent)
             self.top.title("Add New Review")
-            self.top.geometry("300x300")
+            self.top.geometry("600x600")
             self.result = None
 
-            tk.Label(self.top, text="Review Text:").pack()
-            self.review_text_entry = ttk.Entry(self.top)
-            self.review_text_entry.pack()
+            tk.Label(self.top, text="Review Text:").pack(pady=(20, 5))
+            self.review_text_entry = tk.Text(self.top, height=10, width=40)
+            self.review_text_entry.pack(pady=(0, 20))
 
-            tk.Label(self.top, text="Rating (1-5):").pack()
+            tk.Label(self.top, text="Rating (1-5):").pack(pady=(0, 5))
             self.rating_entry = ttk.Entry(self.top)
-            self.rating_entry.pack()
+            self.rating_entry.pack(pady=(0, 20))
 
-            ttk.Button(self.top, text="Add", command=self.add).pack()
+            ttk.Button(self.top, text="Add", command=self.add).pack(pady=(20, 0))
 
         def add(self):
-            self.result = {
-                "review_text": self.review_text_entry.get(),
-                "rating": int(self.rating_entry.get()),
-                "account_id": account_id,
-                "establishment_id": establishment_id,
-            }
-            self.top.destroy()
+            try:
+                rating = int(self.rating_entry.get())
+                if rating < 1 or rating > 5:
+                    raise ValueError("Rating must be an integer between 1 and 5.")
+                self.result = {
+                    "review_text": self.review_text_entry.get("1.0", tk.END).strip(),
+                    "rating": int(self.rating_entry.get()),
+                    "account_id": account_id,
+                    "establishment_id": establishment_id,
+                }
+                self.top.destroy()
+            except ValueError as e:
+                messagebox.showerror("Invalid Rating", str(e))
 
     class EditReviewDialog:
         def __init__(self, parent, review):
             self.top = tk.Toplevel(parent)
             self.top.title("Edit Review")
-            self.top.geometry("300x300")
+            self.top.geometry("600x600")
             self.result = None
             self.review = review
 
-            tk.Label(self.top, text="Review Text:").pack()
-            self.review_text_entry = ttk.Entry(self.top)
-            self.review_text_entry.pack()
-            self.review_text_entry.insert(0, review["review_text"])
+            tk.Label(self.top, text="Review Text:").pack(pady=(20, 5))
+            self.review_text_entry = tk.Text(self.top, height=10, width=40)
+            self.review_text_entry.pack(pady=(0, 20))
+            self.review_text_entry.insert(tk.END, review["review_text"])
 
-            tk.Label(self.top, text="Rating (1-5):").pack()
+            tk.Label(self.top, text="Rating (1-5):").pack(pady=(0, 5))
             self.rating_entry = ttk.Entry(self.top)
-            self.rating_entry.pack()
+            self.rating_entry.pack(pady=(0, 20))
             self.rating_entry.insert(0, review["rating"])
 
-            ttk.Button(self.top, text="Update", command=self.update).pack()
+            ttk.Button(self.top, text="Update", command=self.update).pack(pady=(20, 0))
 
         def update(self):
-            self.result = {
-                "review_id": self.review["review_id"],
-                "review_text": self.review_text_entry.get(),
-                "rating": int(self.rating_entry.get()),
-            }
-            self.top.destroy()
+            try:
+                rating = int(self.rating_entry.get())
+                if rating < 1 or rating > 5:
+                    raise ValueError("Rating must be an integer between 1 and 5.")
+                self.result = {
+                    "review_id": self.review["review_id"],
+                    "review_text": self.review_text_entry.get("1.0", tk.END).strip(),
+                    "rating": int(self.rating_entry.get()),
+                }
+                self.top.destroy()
+            except ValueError as e:
+                messagebox.showerror("Invalid Rating", str(e))
 
     def create_new_box(review):
         new_box_frame = tk.Frame(
@@ -260,7 +272,7 @@ def customer_food_establishment_review(parent, establishment_id, account_id):
             new_box_frame,
             text="Edit",
             font=("Helvetica", 10),
-            command=lambda: edit_review(new_box_frame, review),
+            command=lambda: edit_review(review),
             bg="#B46617",
             fg="white",
             bd=0
@@ -287,7 +299,7 @@ def customer_food_establishment_review(parent, establishment_id, account_id):
         delete_review_from_db(review_id)
         box_frame.destroy()
 
-    def edit_review(box_frame, review):
+    def edit_review(review):
         dialog = EditReviewDialog(customer_food_establishment_review_window, review)
         customer_food_establishment_review_window.wait_window(dialog.top)
         if dialog.result:

@@ -26,11 +26,13 @@ def customer_food_establishment(account_id):
             return []
         database_cursor = database.cursor()
 
-        query = f"SELECT * FROM food_establishment WHERE account_id={account_id} AND name LIKE '%{name}%'"
+        query = f"SELECT * FROM food_establishment WHERE account_id = {account_id} AND name LIKE '%{name}%'"
         database_cursor.execute(query)
         results = database_cursor.fetchall()
+        
         database_cursor.close()
         database.close()
+
         return results
 
     def create_new_box(establishment):
@@ -44,6 +46,7 @@ def customer_food_establishment(account_id):
         )
         new_box_frame.grid_propagate(False)
         new_box_frame.columnconfigure(0, weight=1)
+        
         total_boxes = len(boxes_frame.grid_slaves())
         row_position = total_boxes // 3
         column_position = total_boxes % 3
@@ -83,22 +86,22 @@ def customer_food_establishment(account_id):
         )
         location_value_label.grid(row=0, column=1, sticky="e", padx=5, pady=5)
 
-        avg_rating_label = tk.Label(
+        average_rating_label = tk.Label(
             container,
             bg="#FFFFFF",
             text="Average Rating",
             font=("Helvetica", 10, "bold"),
             fg="#B46617",
         )
-        avg_rating_label.grid(row=1, column=0, sticky="w", padx=5, pady=5)
-        avg_rating_value_label = tk.Label(
+        average_rating_label.grid(row=1, column=0, sticky="w", padx=5, pady=5)
+        average_rating_value_label = tk.Label(
             container,
             bg="#FFFFFF",
             text=establishment["average_rating"],
             font=("Helvetica Neue Light", 10),
             fg="#B46617",
         )
-        avg_rating_value_label.grid(row=1, column=1, sticky="e", padx=5, pady=5)
+        average_rating_value_label.grid(row=1, column=1, sticky="e", padx=5, pady=5)
 
         description_label = tk.Label(
             new_box_frame,
@@ -126,18 +129,18 @@ def customer_food_establishment(account_id):
             new_box_frame,
             text="Check Reviews",
             font=("Helvetica", 10),
-            command=lambda estab_id=establishment["estab_id"]: check_reviews(estab_id),
+            command=lambda establishment_id=establishment["establishment_id"]: check_reviews(establishment_id),
             bg="#B46617",
             fg="white",
             bd=0,
         )
         reviews_button.grid(row=4, column=0, columnspan=1, pady=5, sticky="s")
 
-    def check_reviews(estab_id):
+    def check_reviews(establishment_id):
         print("Check Food Reviews button clicked")
         customer_food_establishment_window.withdraw()
         customer_food_establishment_review.customer_food_establishment_review(
-            customer_food_establishment_window, estab_id, account_id
+            customer_food_establishment_window, establishment_id, account_id
         )
 
     def clear_boxes():
@@ -149,7 +152,7 @@ def customer_food_establishment(account_id):
         establishments_data = search_food_establishment(name)
         for establishment in establishments_data:
             establishment_dict = {
-                "estab_id": establishment[0],
+                "establishment_id": establishment[0],
                 "location": establishment[1],
                 "description": establishment[2],
                 "average_rating": establishment[3],
@@ -168,7 +171,7 @@ def customer_food_establishment(account_id):
     customer_food_establishment_window.resizable(False, False)
     customer_food_establishment_window.configure(bg="#FFFFFF")
 
-    label1 = tk.Label(
+    page_title = tk.Label(
         customer_food_establishment_window,
         text="FOOD ESTABLISHMENT",
         font=("Helvetica", 20, "bold"),
@@ -176,7 +179,7 @@ def customer_food_establishment(account_id):
         fg="#FFBA00",
         anchor="n",
     )
-    label1.grid(row=0, column=0, columnspan=3, sticky="new", pady=10)
+    page_title.grid(row=0, column=0, columnspan=3, sticky="new", pady=10)
 
     search_frame = tk.Frame(customer_food_establishment_window, bg="#FFFFFF")
     search_frame.grid(row=1, column=1, pady=10, padx=(180, 20), sticky="ew")
@@ -184,7 +187,7 @@ def customer_food_establishment(account_id):
     search_entry = tk.Entry(search_frame, font=("Helvetica", 12), width=50)
     search_entry.pack(side=tk.LEFT, padx=30)
 
-    search_btn = tk.Button(
+    search_button = tk.Button(
         search_frame,
         text="Search",
         font=("Helvetica", 12, "bold"),
@@ -193,7 +196,7 @@ def customer_food_establishment(account_id):
         fg="white",
         bd=0,
     )
-    search_btn.pack(side=tk.LEFT, padx=10)
+    search_button.pack(side=tk.LEFT, padx=10)
 
     canvas = tk.Canvas(customer_food_establishment_window, bg="#FFFFFF")
     scroll_y = tk.Scrollbar(
