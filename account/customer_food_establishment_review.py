@@ -6,20 +6,25 @@ import Customer_FoodItems
 
 
 def customer_food_establishment_review(parent, establishment_id, account_id):
-
-    def search_food_establishment_review():
+    def connect_to_db():
         try:
             database = mysql.connector.connect(
                 host="localhost",
                 user="root",
                 password="chancekababy2021",
-                database="project",
+                database="project"
             )
-            database_cursor = database.cursor()
             print("Connected to database...")
+            return database
         except mysql.connector.Error as err:
             messagebox.showerror("Connection", f"Failed: {err}")
+            return None
+    
+    def search_food_establishment_review():
+        database = connect_to_db()
+        if not database:
             return []
+        database_cursor = database.cursor()
 
         query = f"SELECT review_id, review_text, rating FROM food_review WHERE establishment_id = {establishment_id} AND account_id = {account_id}"
         database_cursor.execute(query)
@@ -29,18 +34,10 @@ def customer_food_establishment_review(parent, establishment_id, account_id):
         return results
 
     def add_review_to_db(review):
-        try:
-            database = mysql.connector.connect(
-                host="localhost",
-                user="root",
-                password="chancekababy2021",
-                database="project",
-            )
-            database_cursor = database.cursor()
-            print("Connected to database...")
-        except mysql.connector.Error as err:
-            messagebox.showerror("Connection", f"Failed: {err}")
-            return None
+        database = connect_to_db()
+        if not database:
+            return []
+        database_cursor = database.cursor()
 
         query = "INSERT INTO food_review (review_text, rating, account_id, establishment_id) VALUES (%s, %s, %s, %s)"
         database_cursor.execute(
@@ -61,18 +58,10 @@ def customer_food_establishment_review(parent, establishment_id, account_id):
         return review_id
 
     def update_review_in_db(review):
-        try:
-            database = mysql.connector.connect(
-                host="localhost",
-                user="root",
-                password="chancekababy2021",
-                database="project",
-            )
-            database_cursor = database.cursor()
-            print("Connected to database...")
-        except mysql.connector.Error as err:
-            messagebox.showerror("Connection", f"Failed: {err}")
-            return
+        database = connect_to_db()
+        if not database:
+            return []
+        database_cursor = database.cursor()
 
         query = (
             "UPDATE food_review SET review_text = %s, rating = %s WHERE review_id = %s"
@@ -91,18 +80,10 @@ def customer_food_establishment_review(parent, establishment_id, account_id):
         database.close()
 
     def delete_review_from_db(review_id):
-        try:
-            database = mysql.connector.connect(
-                host="localhost",
-                user="root",
-                password="chancekababy2021",
-                database="project",
-            )
-            database_cursor = database.cursor()
-            print("Connected to database...")
-        except mysql.connector.Error as err:
-            messagebox.showerror("Connection", f"Failed: {err}")
-            return
+        database = connect_to_db()
+        if not database:
+            return []
+        database_cursor = database.cursor()
 
         query = "DELETE FROM food_review WHERE review_id = %s"
         database_cursor.execute(query, (review_id,))
@@ -181,7 +162,7 @@ def customer_food_establishment_review(parent, establishment_id, account_id):
             borderwidth=1,
             relief="solid",
             width=300,
-            height=200,
+            height=250,
         )
         new_box_frame.grid_propagate(False)
         new_box_frame.columnconfigure(0, weight=1)
@@ -233,33 +214,45 @@ def customer_food_establishment_review(parent, establishment_id, account_id):
         rating_value_label.grid(row=1, column=1, sticky="e", padx=5, pady=5)
 
         review_text_label = tk.Label(
-            container,
+            new_box_frame,
             bg="#FFFFFF",
             text="Review text",
             font=("Helvetica", 10, "bold"),
             fg="#B46617"
         )
-        review_text_label.grid(row=2, column=0, sticky="w", padx=5, pady=5)
-        review_text_value_label = tk.Label(
-            container,
+        review_text_label.grid(row=2, column=0, sticky="ew", padx=5, pady=5)
+        review_text_text = tk.Text(
+            new_box_frame,
             bg="#FFFFFF",
-            text=review["review_text"],
             font=("Helvetica Neue Light", 10),
+            wrap="word",
+            height=5,
+            bd=0,
             fg="#B46617",
         )
-        review_text_value_label.grid(row=2, column=1, sticky="e", padx=5, pady=5)
+        review_text_text.insert(tk.END, review["review_text"])
+        review_text_text.configure(state="disabled")
+        review_text_text.grid(row=3, column=0, sticky="ew", padx=10, pady=5)
 
-        edit_button = ttk.Button(
+        edit_button = tk.Button(
             new_box_frame,
             text="Edit",
+            font=("Helvetica", 10),
             command=lambda: edit_review(new_box_frame, review),
+            bg="#B46617",
+            fg="white",
+            bd=0
         )
         edit_button.grid(row=3, column=0, columnspan=1, pady=5, sticky="s")
 
-        delete_box_button = ttk.Button(
+        delete_box_button = tk.Button(
             new_box_frame,
             text="Delete",
+            font=("Helvetica", 10),
             command=lambda: delete_box(new_box_frame, review["review_id"]),
+            bg="#B46617",
+            fg="white",
+            bd=0
         )
         delete_box_button.grid(row=4, column=0, columnspan=1, pady=5, sticky="s")
 
@@ -278,29 +271,7 @@ def customer_food_establishment_review(parent, establishment_id, account_id):
         if dialog.result:
             update_review_in_db(dialog.result)
             review.update(dialog.result)
-            for widget in box_frame.winfo_children():
-                widget.destroy()
-
-            reviewer_name_label = tk.Label(box_frame, text=f"{account_id}")
-            reviewer_name_label.pack(expand=True)
-
-            details_label = tk.Label(
-                box_frame,
-                text=f"ID: {review['review_id']}\nRating: {review['rating']}\nReview: {review['review_text']}\nEstablishment: {review['establishment_id']}",
-            )
-            details_label.pack(expand=True)
-
-            edit_button = ttk.Button(
-                box_frame, text="Edit", command=lambda: edit_review(box_frame, review)
-            )
-            edit_button.pack(side="left", padx=5)
-
-            delete_box_button = ttk.Button(
-                box_frame,
-                text="Delete",
-                command=lambda: delete_box(box_frame, review["review_id"]),
-            )
-            delete_box_button.pack(side="left", padx=5)
+            load_initial_data()
 
     def go_back():
         parent.deiconify()
@@ -323,8 +294,8 @@ def customer_food_establishment_review(parent, establishment_id, account_id):
         for establishment_review in establishment_reviews:
             establishment_review = {
                 "review_id": establishment_review[0],
-                "rating": establishment_review[1],
-                "review_text": establishment_review[2],
+                "review_text": establishment_review[1],
+                "rating": establishment_review[2],
             }
             create_new_box(establishment_review)
 
@@ -332,7 +303,7 @@ def customer_food_establishment_review(parent, establishment_id, account_id):
     customer_food_establishment_review_window.geometry("1100x650")
     customer_food_establishment_review_window.title("Food Establishment Reviews")
     customer_food_establishment_review_window.resizable(False, False)
-    customer_food_establishment_review_window.configure(bg="#D3D3D3")
+    customer_food_establishment_review_window.configure(bg="#FFFFFF")
 
     label1 = tk.Label(
         customer_food_establishment_review_window,

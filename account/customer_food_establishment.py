@@ -24,10 +24,9 @@ def customer_food_establishment(account_id):
         database = connect_to_db()
         if not database:
             return []
-
         database_cursor = database.cursor()
+
         query = f"SELECT * FROM food_establishment WHERE account_id={account_id} AND name LIKE '%{name}%'"
-        print(query)
         database_cursor.execute(query)
         results = database_cursor.fetchall()
         database_cursor.close()
@@ -52,7 +51,7 @@ def customer_food_establishment(account_id):
         new_box_frame.grid(
             row=row_position, column=column_position, padx=20, pady=30, sticky="nsew"
         )
-        
+
         item_name_label = tk.Label(
             new_box_frame,
             bg="#FFFFFF",
