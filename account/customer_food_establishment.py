@@ -2,7 +2,7 @@ import tkinter as tk
 from tkinter import ttk
 from tkinter import messagebox
 import mysql.connector
-import Customer_EstabReviews
+import customer_food_establishment_review
 
 
 def customer_food_establishment(account_id):
@@ -52,6 +52,7 @@ def customer_food_establishment(account_id):
         new_box_frame.grid(
             row=row_position, column=column_position, padx=20, pady=30, sticky="nsew"
         )
+        
         item_name_label = tk.Label(
             new_box_frame,
             bg="#FFFFFF",
@@ -109,7 +110,6 @@ def customer_food_establishment(account_id):
         )
         description_label.grid(row=2, column=0, sticky="ew", padx=5, pady=5)
 
-        # Creating a Text widget for the description
         description_text = tk.Text(
             new_box_frame,
             bg="#FFFFFF",
@@ -126,7 +126,7 @@ def customer_food_establishment(account_id):
         reviews_button = tk.Button(
             new_box_frame,
             text="Check Reviews",
-            font=("Helvetica", 10, "bold"),
+            font=("Helvetica", 10),
             command=lambda estab_id=establishment["estab_id"]: check_reviews(estab_id),
             bg="#B46617",
             fg="white",
@@ -137,7 +137,7 @@ def customer_food_establishment(account_id):
     def check_reviews(estab_id):
         print("Check Food Reviews button clicked")
         customer_food_establishment_window.withdraw()
-        Customer_EstabReviews.establishmentReviews(
+        customer_food_establishment_review.customer_food_establishment_review(
             customer_food_establishment_window, estab_id, account_id
         )
 
@@ -179,12 +179,11 @@ def customer_food_establishment(account_id):
     )
     label1.grid(row=0, column=0, columnspan=3, sticky="new", pady=10)
 
-    # Search bar
     search_frame = tk.Frame(customer_food_establishment_window, bg="#FFFFFF")
-    search_frame.grid(row=1, column=1, columnspan=2, pady=10, padx=20, sticky="ew")
+    search_frame.grid(row=1, column=1, pady=10, padx=(180, 20), sticky="ew")
 
-    search_entry = tk.Entry(search_frame, font=("Helvetica", 12), width=30)
-    search_entry.pack(side=tk.LEFT, padx=10)
+    search_entry = tk.Entry(search_frame, font=("Helvetica", 12), width=50)
+    search_entry.pack(side=tk.LEFT, padx=30)
 
     search_btn = tk.Button(
         search_frame,
@@ -197,7 +196,6 @@ def customer_food_establishment(account_id):
     )
     search_btn.pack(side=tk.LEFT, padx=10)
 
-    # Scrollable frame setup
     canvas = tk.Canvas(customer_food_establishment_window, bg="#FFFFFF")
     scroll_y = tk.Scrollbar(
         customer_food_establishment_window, orient="vertical", command=canvas.yview
@@ -211,9 +209,8 @@ def customer_food_establishment(account_id):
     canvas.create_window((0, 0), window=scroll_frame, anchor="nw")
     canvas.configure(yscrollcommand=scroll_y.set)
 
-    # Grid layout for the scrollable frame
     scroll_y.grid(row=2, column=3, sticky="ns")
-    canvas.grid(row=2, column=0, columnspan=3, sticky="nsew")
+    canvas.grid(row=2, column=0, columnspan=3, padx=(30, 20), sticky="nsew")
 
     boxes_frame = tk.Frame(scroll_frame, bg="#FFFFFF")
     boxes_frame.grid(row=0, column=0, sticky="nsew")
