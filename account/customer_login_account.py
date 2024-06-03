@@ -103,6 +103,9 @@ def login():
         if myresult == None:
             messagebox.showerror("Invalid", "Invalid Email or Password.")
             return
+
+        mycursor.close()
+        mydb.close()
         
         messagebox.showinfo("Log in", "Welcome.")
         root.withdraw()

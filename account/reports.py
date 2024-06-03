@@ -148,5 +148,5 @@ class MainSystem:
 # main window
 if __name__ == "__main__":
     root = Tk()
-    obj = MainSystem(root)
+    obj = MainSystem(root, 1, "customer", root)
     root.mainloop()
