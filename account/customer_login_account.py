@@ -108,7 +108,7 @@ def login():
         
         messagebox.showinfo("Log in", "Welcome.")
         root.withdraw()
-        customer_food_establishment(mycursor[0])
+        customer_food_establishment(myresult[0])
 
 
 # root window
